@@ -644,16 +644,10 @@ def check_payment_status(transaction_id):
         # Verificar se o status é explicitamente PAID ou APPROVED antes de redirecionar
         if status_response['success'] and (status_response['status'] == 'PAID' or status_response['status'] == 'APPROVED'):
             app.logger.info(f"Pagamento confirmado com status: {status_response['status']}")
-            
-            # Enviar conversão server-side para Meta Ads
-            try:
-                send_meta_conversion(registration_data, transaction_id, 64.80)
-                app.logger.info("Conversão server-side enviada para Meta Ads")
-            except Exception as e:
-                app.logger.error(f"Erro ao enviar conversão server-side para Meta: {str(e)}")
                 
             # Sempre retornar PAID para o frontend quando o pagamento for confirmado
             # Independentemente do status real (PAID ou APPROVED)
+            # O tracking será feito via pixel client-side no frontend
             return jsonify({
                 "success": True,
                 "redirect": True,

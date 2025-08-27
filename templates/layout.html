@@ -167,5 +167,68 @@
     </footer>
 
     <script src="{{ url_for('static', filename='js/validation.js') }}"></script>
+    
+    <!-- Script para capturar parâmetros UTM em todas as páginas -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Função para capturar e persistir parâmetros UTM da Meta
+        function captureUTMParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            let hasNewParams = false;
+            
+            // Parâmetros UTM padrão
+            ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach(param => {
+                const value = urlParams.get(param);
+                if (value) {
+                    localStorage.setItem(param, value);
+                    hasNewParams = true;
+                }
+            });
+            
+            // Parâmetros específicos da Meta/Facebook
+            ['fbclid', 'fbc', 'fbp'].forEach(param => {
+                const value = urlParams.get(param);
+                if (value) {
+                    localStorage.setItem(param, value);
+                    hasNewParams = true;
+                }
+            });
+            
+            // Se capturou novos parâmetros, log para debug
+            if (hasNewParams) {
+                console.log('Parâmetros UTM/Meta capturados e salvos no localStorage');
+            }
+            
+            // Capturar cookie _fbc se existir
+            const fbcCookie = document.cookie.split('; ').find(row => row.startsWith('_fbc='));
+            if (fbcCookie) {
+                localStorage.setItem('fbc', fbcCookie.split('=')[1]);
+            }
+            
+            // Capturar cookie _fbp se existir
+            const fbpCookie = document.cookie.split('; ').find(row => row.startsWith('_fbp='));
+            if (fbpCookie) {
+                localStorage.setItem('fbp', fbpCookie.split('=')[1]);
+            }
+        }
+        
+        // Capturar parâmetros UTM em todas as páginas
+        captureUTMParams();
+        
+        // Se fbq estiver disponível, configurar tracking automático
+        if (typeof fbq !== 'undefined') {
+            // Enviar evento de PageView com parâmetros UTM se disponíveis
+            const utmData = {};
+            ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach(param => {
+                const value = localStorage.getItem(param);
+                if (value) utmData[param] = value;
+            });
+            
+            if (Object.keys(utmData).length > 0) {
+                fbq('trackCustom', 'PageView_WithUTM', utmData);
+            }
+        }
+    });
+    </script>
 </body>
 </html>

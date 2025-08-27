@@ -135,8 +135,46 @@ body {
 <script>
 let currentTransactionId = null;
 
+// Função para hash SHA256 (para dados sensíveis)
+async function hashData(data) {
+    if (!data) return null;
+    const encoder = new TextEncoder();
+    const dataBuffer = encoder.encode(data.toLowerCase().trim());
+    const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// Função para obter parâmetros UTM da URL
+function getUTMParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const utmParams = {};
+    
+    // Parâmetros UTM padrão
+    ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach(param => {
+        const value = urlParams.get(param) || localStorage.getItem(param);
+        if (value) {
+            utmParams[param] = value;
+            localStorage.setItem(param, value); // Persistir para outras páginas
+        }
+    });
+    
+    // Parâmetros específicos da Meta
+    ['fbclid', 'fbc', 'fbp'].forEach(param => {
+        const value = urlParams.get(param) || localStorage.getItem(param);
+        if (value) {
+            utmParams[param] = value;
+            localStorage.setItem(param, value);
+        }
+    });
+    
+    return utmParams;
+}
+
 // Função para processar pagamento ao carregar a página
 document.addEventListener('DOMContentLoaded', function() {
+    // Capturar e armazenar parâmetros UTM
+    getUTMParams();
     initializePayment();
 });
 
@@ -349,16 +387,9 @@ function startAutomaticStatusCheck(transactionId) {
                     console.log('Pagamento aprovado! Redirecionando para /taxa');
                     clearInterval(statusInterval);
                     
-                    // Enviar evento de purchase para Meta Pixel
+                    // Enviar evento de purchase avançado para Meta Pixel
                     if (typeof fbq !== 'undefined') {
-                        fbq('track', 'Purchase', {
-                            value: 64.80,
-                            currency: 'BRL',
-                            content_type: 'product',
-                            content_name: 'Taxa de Emissão CAC',
-                            content_ids: ['cac-taxa-emissao']
-                        });
-                        console.log('Evento Purchase enviado para Meta Pixel');
+                        sendAdvancedPurchaseEvent();
                     }
                     
                     // Mostrar feedback visual antes de redirecionar
@@ -384,6 +415,89 @@ function startAutomaticStatusCheck(transactionId) {
         clearInterval(statusInterval);
         console.log('Verificação automática de status encerrada após 10 minutos');
     }, 600000);
+}
+
+// Função para enviar evento de purchase avançado com todos os dados
+async function sendAdvancedPurchaseEvent() {
+    try {
+        // Obter dados do usuário
+        const userData = {
+            nome: document.getElementById('user-name').textContent || localStorage.getItem('full_name') || '',
+            cpf: document.getElementById('user-cpf').textContent || localStorage.getItem('cpf') || '',
+            telefone: localStorage.getItem('phone') || localStorage.getItem('telefone') || ''
+        };
+        
+        // Obter parâmetros UTM
+        const utmParams = getUTMParams();
+        
+        // Preparar dados para o evento
+        const eventData = {
+            value: 64.80,
+            currency: 'BRL',
+            content_type: 'product',
+            content_name: 'Taxa de Emissão CAC',
+            content_ids: ['cac-taxa-emissao'],
+            num_items: 1,
+            transaction_id: currentTransactionId || 'cac-' + Date.now(),
+            // Adicionar dados UTM como custom parameters
+            utm_source: utmParams.utm_source || '',
+            utm_medium: utmParams.utm_medium || '',
+            utm_campaign: utmParams.utm_campaign || '',
+            utm_content: utmParams.utm_content || '',
+            utm_term: utmParams.utm_term || ''
+        };
+        
+        // Hash dados sensíveis se disponíveis
+        if (userData.nome && userData.nome !== 'USUÁRIO NÃO IDENTIFICADO') {
+            // Extrair email se existir (assumindo formato nome + @domain)
+            const emailGuess = userData.nome.toLowerCase().replace(/\s+/g, '') + '@email.com';
+            eventData.em = await hashData(emailGuess);
+        }
+        
+        if (userData.telefone) {
+            // Limpar telefone para hash
+            const cleanPhone = userData.telefone.replace(/[^\d]/g, '');
+            if (cleanPhone.length >= 10) {
+                eventData.ph = await hashData('+55' + cleanPhone);
+            }
+        }
+        
+        // Adicionar parâmetros específicos da Meta se disponíveis
+        if (utmParams.fbc) {
+            eventData.fbc = utmParams.fbc;
+        }
+        if (utmParams.fbp) {
+            eventData.fbp = utmParams.fbp;
+        }
+        
+        // Enviar evento principal
+        fbq('track', 'Purchase', eventData);
+        
+        // Enviar também como evento customizado para garantir
+        fbq('trackCustom', 'CAC_Payment_Completed', {
+            value: 64.80,
+            currency: 'BRL',
+            transaction_id: currentTransactionId,
+            product: 'Taxa de Emissão CAC',
+            user_name: userData.nome,
+            user_cpf: userData.cpf,
+            utm_data: utmParams
+        });
+        
+        console.log('Evento Purchase avançado enviado para Meta Pixel com dados:', eventData);
+        
+    } catch (error) {
+        console.error('Erro ao enviar evento avançado para Meta:', error);
+        
+        // Fallback para evento básico
+        fbq('track', 'Purchase', {
+            value: 64.80,
+            currency: 'BRL',
+            content_type: 'product',
+            content_name: 'Taxa de Emissão CAC',
+            content_ids: ['cac-taxa-emissao']
+        });
+    }
 }
 
 function retryPayment() {
