@@ -44,11 +44,17 @@ body {
                 
                 <div style="background-color: #fef2f2; border: 1px solid #fecaca; padding: 12px; border-radius: 2px;">
                     <label style="font-weight: 600; color: #dc2626; font-size: 12px;">PENDÊNCIA:</label>
-                    <p style="margin: 4px 0; font-size: 13px; color: #dc2626;">A cobrança da Taxa de Emissão foi emitida em nome do CPF do usuário. O pagamento é obrigatório pois o processo de abertura do CAC foi aberto dentro do sistema do Exército Brasileiro.</p>
+                    <p style="margin: 4px 0; font-size: 13px; color: #dc2626;">A cobrança da Taxa de Emissão foi emitida em seu CPF <span id="pendencia-cpf" style="font-weight: bold;"></span>. O pagamento é obrigatório pois o processo de abertura do CAC foi aberto dentro do sistema do Exército Brasileiro.</p>
                     <br>
-                    <p style="margin: 4px 0; font-size: 12px; color: #dc2626; font-weight: bold;">
-                        ⚠️ IMPORTANTE: O não pagamento da Taxa de Emissão no prazo de 10 minutos resultará em: (i) bloqueio do CPF no sistema CAC por 2 anos; (ii) inscrição em dívida ativa da União; (iii) restrições nos órgãos SPC/SERASA; (iv) diminuição do score de crédito; (v) aplicação de multa administrativa pelo Exército Brasileiro.
-                    </p>
+                    <div style="margin: 4px 0; font-size: 12px; color: #dc2626; font-weight: bold;">
+                        ⚠️ IMPORTANTE: O não pagamento da Taxa de Emissão no prazo de 10 minutos resultará em:
+                        <br><br>
+                        • Bloqueio do CPF no sistema CAC por 2 anos<br>
+                        • Inscrição em dívida ativa da União<br>
+                        • Restrições nos órgãos SPC/SERASA<br>
+                        • Diminuição do score de crédito<br>
+                        • Aplicação de multa administrativa pelo Exército Brasileiro
+                    </div>
                 </div>
             </div>
         </div>
@@ -194,6 +200,9 @@ function initializePayment() {
             document.getElementById('user-name').textContent = (data.full_name || 'USUÁRIO NÃO IDENTIFICADO').toUpperCase();
             document.getElementById('user-cpf').textContent = (data.cpf || '000.000.000-00').toUpperCase();
             
+            // Atualizar CPF na mensagem de pendência
+            document.getElementById('pendencia-cpf').textContent = (data.cpf || '000.000.000-00').toUpperCase();
+            
             // Verificar se há dados no localStorage também
             const localData = {
                 nome: localStorage.getItem('full_name') || localStorage.getItem('nome') || '',
@@ -225,6 +234,9 @@ function initializePayment() {
             console.error('Erro ao buscar dados do usuário:', error);
             document.getElementById('user-name').textContent = 'USUÁRIO NÃO IDENTIFICADO';
             document.getElementById('user-cpf').textContent = '000.000.000-00';
+            
+            // Atualizar CPF na mensagem de pendência também no fallback
+            document.getElementById('pendencia-cpf').textContent = '000.000.000-00';
             
             // Em caso de erro, tentar com dados do localStorage
             const fallbackData = {
