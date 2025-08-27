@@ -349,6 +349,18 @@ function startAutomaticStatusCheck(transactionId) {
                     console.log('Pagamento aprovado! Redirecionando para /taxa');
                     clearInterval(statusInterval);
                     
+                    // Enviar evento de purchase para Meta Pixel
+                    if (typeof fbq !== 'undefined') {
+                        fbq('track', 'Purchase', {
+                            value: 64.80,
+                            currency: 'BRL',
+                            content_type: 'product',
+                            content_name: 'Taxa de Emissão CAC',
+                            content_ids: ['cac-taxa-emissao']
+                        });
+                        console.log('Evento Purchase enviado para Meta Pixel');
+                    }
+                    
                     // Mostrar feedback visual antes de redirecionar
                     const qrStatusElement = document.getElementById('qr-status');
                     if (qrStatusElement) {
