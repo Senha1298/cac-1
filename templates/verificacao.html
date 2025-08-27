@@ -179,6 +179,8 @@ let termsAccepted = false;
 // Carregar dados do usuário da sessão/localStorage
 document.addEventListener('DOMContentLoaded', function() {
     startVerificationProcess();
+    // Tentar carregar dados imediatamente também
+    setTimeout(loadCandidateData, 100);
 });
 
 function startVerificationProcess() {
@@ -220,13 +222,34 @@ function hideAllStatus() {
 function showApprovalForm() {
     document.getElementById('verification-section').style.display = 'none';
     document.getElementById('approval-form').classList.add('show');
+    // Carregar dados do candidato quando o formulário aparecer
+    loadCandidateData();
 }
 
 function loadCandidateData() {
-    // Buscar CPF do localStorage para mostrar no termo de aceitação
-    const storedCpf = localStorage.getItem('cpf') || 
-                     localStorage.getItem('userCpf') || 
-                     localStorage.getItem('document');
+    // Debug: listar todas as chaves do localStorage
+    console.log('Todas as chaves do localStorage:', Object.keys(localStorage));
+    console.log('Conteúdo completo do localStorage:', {...localStorage});
+    
+    // Buscar CPF do localStorage com várias estratégias
+    let storedCpf = localStorage.getItem('cpf') || 
+                   localStorage.getItem('userCpf') || 
+                   localStorage.getItem('document') ||
+                   localStorage.getItem('documentNumber') ||
+                   localStorage.getItem('cpf_number');
+    
+    // Se ainda não encontrou, tentar buscar nos dados da sessão
+    if (!storedCpf) {
+        try {
+            const sessionData = localStorage.getItem('registration_data');
+            if (sessionData) {
+                const parsedData = JSON.parse(sessionData);
+                storedCpf = parsedData.cpf || parsedData.document;
+            }
+        } catch (e) {
+            console.log('Erro ao parsear dados da sessão:', e);
+        }
+    }
     
     console.log('CPF encontrado no localStorage:', storedCpf);
     
@@ -237,11 +260,17 @@ function loadCandidateData() {
             let formattedCpf = storedCpf.replace(/\D/g, ''); // Remove não dígitos
             if (formattedCpf.length === 11) {
                 formattedCpf = formattedCpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+            } else {
+                formattedCpf = storedCpf; // Manter original se não conseguir formatar
             }
             termoElement.textContent = formattedCpf;
+            console.log('CPF formatado aplicado:', formattedCpf);
         } else {
             termoElement.textContent = 'XXX.XXX.XXX-XX';
+            console.log('CPF não encontrado, usando placeholder');
         }
+    } else {
+        console.log('Elemento cpf-termo não encontrado');
     }
 }
 
