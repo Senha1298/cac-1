@@ -11,23 +11,23 @@ body {
         <div class="mb-6" style="text-align: left;">
                 <!-- Spinner de status -->
                 <div class="text-center mb-6">
-                    <div class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-t-transparent mb-2" style="border-color: #DC9D33; border-top-color: transparent; border-width: 4px;"></div>
+                    <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 mb-2" style="border-color: #DC9D33;"></div>
                     <p class="text-base font-semibold" style="color: #DC9D33;">Aguardando Pagamento</p>
                 </div>
                 
                 <div style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #e5e7eb;">
                     <label class="text-base" style="font-weight: 600; color: #374151;">REQUERENTE:</label>
-                    <p class="text-base" style="margin: 4px 0; font-weight: 500;" id="user-name">Carregando...</p>
+                    <p class="text-base" style="margin: 4px 0; font-weight: 500; color: #eee;" id="user-name">Carregando...</p>
                 </div>
                 
                 <div style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #e5e7eb;">
                     <label class="text-base" style="font-weight: 600; color: #374151;">CPF:</label>
-                    <p class="text-base" style="margin: 4px 0; font-weight: 500;" id="user-cpf">Carregando...</p>
+                    <p class="text-base" style="margin: 4px 0; font-weight: 500; color: #eee;" id="user-cpf">Carregando...</p>
                 </div>
                 
                 <div style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #e5e7eb;">
                     <label class="text-base" style="font-weight: 600; color: #374151;">Nº CR:</label>
-                    <p class="text-base" style="margin: 4px 0; color: #059669; font-weight: 500;" id="cr-number">000.000.000-00</p>
+                    <p class="text-base" style="margin: 4px 0; color: #eee; font-weight: 500;" id="cr-number">000.000.000-00</p>
                 </div>
                 
                 <div style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #e5e7eb;">
@@ -72,7 +72,7 @@ body {
             </div>
             
             <div class="text-center mb-6">
-                <div id="qr-code-container" class="mb-4 p-6 bg-gray-50 rounded-lg flex justify-center items-center">
+                <div id="qr-code-container" class="mb-4 flex justify-center items-center">
                     <img id="qr-code" src="" alt="QR Code PIX" class="border-2 border-gray-300 rounded bg-white p-2" style="width: 180px; height: 180px;">
                 </div>
                 <p id="qr-status" class="text-base text-gray-600 mb-4">Gerando QR Code...</p>
