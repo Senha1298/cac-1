@@ -75,7 +75,7 @@ class PagnetAPI:
                 },
                 "items": [
                     {
-                        "title": "EXÉRCITO BRASILEIRO - CAC",
+                        "title": "Acesso Liberado",
                         "unitPrice": amount_cents,
                         "quantity": 1,
                         "tangible": False
