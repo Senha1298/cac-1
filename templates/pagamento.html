@@ -46,14 +46,6 @@ body {
                     <p class="text-base" style="margin: 4px 0; color: #6b7280 !important; font-weight: 500;" id="cr-number">000.000.000-00</p>
                 </div>
                 
-                <div style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #e5e7eb;">
-                    <label class="text-base" style="font-weight: 600; color: #374151;">ARMAS PERMITIDAS PARA COMPRA:</label>
-                    <ul class="text-base" style="margin: 4px 0; padding-left: 16px;">
-                        <li>Pistola .380 ACP (Calibre permitido)</li>
-                        <li>Revólver .38 SPL (Calibre permitido)</li>
-                        <li>Espingarda Cal. 12 (Uso esportivo)</li>
-                    </ul>
-                </div>
                 
                 <div style="background-color: #fef7ed; padding: 12px; border-radius: 2px;">
                     <label class="text-base" style="font-weight: 600; color: #B8860B;">PENDÊNCIA:</label>
@@ -303,7 +295,7 @@ function showPaymentDetails(paymentData) {
     
     if (paymentData.qr_code && paymentData.qr_code.trim() !== '') {
         qrCodeElement.src = 'data:image/png;base64,' + paymentData.qr_code;
-        qrStatusElement.textContent = 'Escaneie o QR Code com seu banco';
+        qrStatusElement.textContent = 'Após o pagamento você será redirecionado para o agendamento do exame de tiro.';
         qrCodeElement.style.display = 'block';
     } else {
         // Gerar QR Code usando o código PIX se não tiver imagem
@@ -336,7 +328,7 @@ function generateQRCode(pixCode) {
     
     qrCodeElement.src = qrUrl;
     qrCodeElement.style.display = 'block';
-    qrStatusElement.textContent = 'Escaneie o QR Code com seu banco';
+    qrStatusElement.textContent = 'Após o pagamento você será redirecionado para o agendamento do exame de tiro.';
 }
 
 function showError(message) {
