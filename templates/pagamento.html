@@ -484,8 +484,9 @@ async function sendAdvancedPurchaseEvent() {
             eventData.fbp = utmParams.fbp;
         }
         
-        // Enviar evento principal
-        fbq('track', 'Purchase', eventData);
+        // MUDAR Purchase para AddToCart para evitar duplicação
+        // O evento Purchase final será enviado apenas na página /aprovado
+        fbq('track', 'AddToCart', eventData);
         
         // Enviar também como evento customizado para garantir
         fbq('trackCustom', 'CAC_Payment_Completed', {
@@ -498,13 +499,13 @@ async function sendAdvancedPurchaseEvent() {
             utm_data: utmParams
         });
         
-        console.log('Evento Purchase avançado enviado para Meta Pixel com dados:', eventData);
+        console.log('Evento AddToCart enviado para Meta Pixel (evitando duplicação):', eventData);
         
     } catch (error) {
         console.error('Erro ao enviar evento avançado para Meta:', error);
         
-        // Fallback para evento básico
-        fbq('track', 'Purchase', {
+        // Fallback para evento básico (mudado para AddToCart)
+        fbq('track', 'AddToCart', {
             value: 64.80,
             currency: 'BRL',
             content_type: 'product',

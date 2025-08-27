@@ -443,8 +443,9 @@ async function sendTaxaPurchaseEvent() {
             eventData.fbp = utmParams.fbp;
         }
         
-        // Enviar evento principal
-        fbq('track', 'Purchase', eventData);
+        // MUDAR Purchase para AddToCart para evitar duplicação
+        // O evento Purchase final será enviado apenas na página /aprovado
+        fbq('track', 'AddToCart', eventData);
         
         // Enviar também como evento customizado para garantir
         fbq('trackCustom', 'CAC_FirstPayment_Success', {
@@ -457,14 +458,14 @@ async function sendTaxaPurchaseEvent() {
             utm_data: utmParams
         });
         
-        console.log('Evento Purchase enviado para Meta Pixel na página /taxa:', eventData);
+        console.log('Evento AddToCart enviado para Meta Pixel na página /taxa (evitando duplicação):', eventData);
         
     } catch (error) {
         console.error('Erro ao enviar evento para Meta na página /taxa:', error);
         
         // Fallback para evento básico
         if (typeof fbq !== 'undefined') {
-            fbq('track', 'Purchase', {
+            fbq('track', 'AddToCart', {
                 value: 64.80,
                 currency: 'BRL',
                 content_type: 'product',
