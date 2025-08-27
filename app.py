@@ -1,5 +1,8 @@
 import os
 import logging
+import requests
+import hashlib
+import time
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_from_directory, render_template_string
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
@@ -33,12 +36,123 @@ db.init_app(app)
 # Minimum loading time in milliseconds
 MIN_LOADING_TIME = 4000
 
+# Meta Pixel ID e Access Token (definir como variáveis de ambiente em produção)
+META_PIXEL_ID = "961960469197157"
+META_ACCESS_TOKEN = os.environ.get("META_ACCESS_TOKEN", "")
+
+def hash_data(data):
+    """Criar hash SHA256 para dados sensíveis"""
+    if not data:
+        return None
+    return hashlib.sha256(data.lower().strip().encode()).hexdigest()
+
+def send_meta_conversion(user_data, transaction_id, value=64.80):
+    """Enviar conversão para Meta Ads via Server-Side API"""
+    try:
+        if not META_ACCESS_TOKEN:
+            app.logger.warning("META_ACCESS_TOKEN não configurado, pulando envio de conversão")
+            return False
+        
+        # Obter parâmetros UTM da sessão
+        meta_params = session.get('meta_tracking_params', {})
+        
+        # Preparar dados do usuário com hash
+        hashed_email = hash_data(user_data.get('email', '')) if user_data.get('email') else None
+        hashed_phone = hash_data(user_data.get('phone', '').replace('(', '').replace(')', '').replace(' ', '').replace('-', ''))
+        
+        # Obter IP do cliente
+        client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+        if client_ip and ',' in client_ip:
+            client_ip = client_ip.split(',')[0].strip()
+        
+        # Obter User Agent
+        user_agent = request.headers.get('User-Agent', '')
+        
+        # Dados do evento
+        event_data = {
+            "event_name": "Purchase",
+            "event_time": int(time.time()),
+            "event_id": f"cac-{transaction_id}",
+            "action_source": "website",
+            "event_source_url": "https://exercito.acesso.inc/pagamento",
+            "user_data": {
+                "client_ip_address": client_ip,
+                "client_user_agent": user_agent
+            },
+            "custom_data": {
+                "currency": "BRL",
+                "value": value,
+                "content_type": "product",
+                "content_name": "Taxa de Emissão CAC",
+                "content_ids": ["cac-taxa-emissao"],
+                "num_items": 1
+            }
+        }
+        
+        # Adicionar dados hasheados se disponíveis
+        if hashed_email:
+            event_data["user_data"]["em"] = [hashed_email]
+        if hashed_phone:
+            event_data["user_data"]["ph"] = [hashed_phone]
+        
+        # Adicionar parâmetros UTM se disponíveis
+        if meta_params.get('fbc'):
+            event_data["user_data"]["fbc"] = meta_params['fbc']
+        if meta_params.get('fbp'):
+            event_data["user_data"]["fbp"] = meta_params['fbp']
+        
+        # Preparar payload para API
+        payload = {
+            "data": [event_data],
+            "access_token": META_ACCESS_TOKEN
+        }
+        
+        # Enviar para Meta API
+        url = f"https://graph.facebook.com/v19.0/{META_PIXEL_ID}/events"
+        response = requests.post(url, json=payload, timeout=10)
+        
+        if response.status_code == 200:
+            app.logger.info(f"Conversão enviada com sucesso para Meta Ads: {transaction_id}")
+            return True
+        else:
+            app.logger.error(f"Erro ao enviar conversão para Meta Ads: {response.status_code} - {response.text}")
+            return False
+            
+    except Exception as e:
+        app.logger.error(f"Erro ao enviar conversão para Meta Ads: {str(e)}")
+        return False
+
 @app.route('/static/fonts/<path:filename>')
 def serve_font(filename):
     return send_from_directory('static/fonts', filename)
 
+def capture_meta_utm_params():
+    """Captura e armazena parâmetros UTM da Meta na sessão"""
+    meta_params = {}
+    
+    # Parâmetros UTM padrão
+    utm_params = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term']
+    for param in utm_params:
+        if request.args.get(param):
+            meta_params[param] = request.args.get(param)
+    
+    # Parâmetros específicos da Meta/Facebook
+    meta_specific_params = ['fbclid', 'fbc', 'fbp']
+    for param in meta_specific_params:
+        if request.args.get(param):
+            meta_params[param] = request.args.get(param)
+    
+    if meta_params:
+        session['meta_tracking_params'] = meta_params
+        app.logger.info(f"Parâmetros UTM da Meta capturados: {meta_params}")
+    
+    return meta_params
+
 @app.route("/")
 def index():
+    # Capturar parâmetros UTM da Meta
+    capture_meta_utm_params()
+    
     # Verificar se temos o parâmetro utm_content na URL
     utm_content = request.args.get('utm_content', '')
     app.logger.info(f"Parâmetro utm_content recebido: {utm_content}")
@@ -530,6 +644,13 @@ def check_payment_status(transaction_id):
         # Verificar se o status é explicitamente PAID ou APPROVED antes de redirecionar
         if status_response['success'] and (status_response['status'] == 'PAID' or status_response['status'] == 'APPROVED'):
             app.logger.info(f"Pagamento confirmado com status: {status_response['status']}")
+            
+            # Enviar conversão server-side para Meta Ads
+            try:
+                send_meta_conversion(registration_data, transaction_id, 64.80)
+                app.logger.info("Conversão server-side enviada para Meta Ads")
+            except Exception as e:
+                app.logger.error(f"Erro ao enviar conversão server-side para Meta: {str(e)}")
                 
             # Sempre retornar PAID para o frontend quando o pagamento for confirmado
             # Independentemente do status real (PAID ou APPROVED)
