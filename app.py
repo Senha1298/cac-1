@@ -399,13 +399,22 @@ def submit_psicotecnico():
         return jsonify({
             "success": True, 
             "redirect": url_for('loading', 
-                next='/aprovado', 
+                next='/verificacao', 
                 text='Analisando avaliação psicotécnica...', 
                 time=6000)
         })
     except Exception as e:
         logging.error(f"Error in submit_psicotecnico: {str(e)}")
         return jsonify({"success": False, "error": str(e)})
+
+@app.route("/verificacao")
+def verificacao():
+    if not session.get('registration_data'):
+        return redirect(url_for('loading', 
+            next='/', 
+            text='Redirecionando...', 
+            time=2000))
+    return render_template("verificacao.html")
 
 @app.route("/aprovado")
 def aprovado():
