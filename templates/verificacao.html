@@ -105,16 +105,16 @@ body {
 
         <!-- Formulário de Aprovação -->
         <div class="form-container" id="approval-form">
-            <div class="text-center mb-8 bg-gray-100 p-8 rounded-lg">
-                <div class="inline-flex items-center justify-center w-20 h-20 bg-white rounded-full mb-6 shadow-lg">
-                    <i class="fas fa-check-circle text-green-600 text-4xl"></i>
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-24 h-24 bg-white rounded-full mb-6 shadow-lg border-4 border-green-500">
+                    <i class="fas fa-check-circle text-green-600 text-5xl"></i>
                 </div>
-                <h3 class="text-2xl font-bold text-green-800">PARABÉNS! VOCÊ FOI APROVADO</h3>
-                <p class="text-gray-700 mt-2 text-lg">Seu pedido de CAC foi aprovado pelo sistema do Exército Brasileiro</p>
+                <h3 class="text-3xl font-bold text-green-800 mb-4">PARABÉNS! VOCÊ FOI APROVADO</h3>
+                <p class="text-gray-700 text-xl font-medium">Seu pedido de CAC foi aprovado pelo sistema do Exército Brasileiro</p>
             </div>
 
-            <div class="bg-gray-100 p-6 rounded-lg mb-6">
-                <h4 class="text-lg font-bold text-gray-800 mb-6">DADOS DO REQUERENTE</h4>
+            <div class="bg-gray-100 p-8 rounded-lg mb-8">
+                <h4 class="text-xl font-bold text-gray-800 mb-6">DADOS DO REQUERENTE</h4>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                     <div class="bg-white p-4 rounded-lg shadow-sm">
@@ -142,8 +142,8 @@ body {
             </div>
 
             <!-- Próximas Etapas -->
-            <div class="bg-gray-100 p-6 rounded-lg mb-6">
-                <h4 class="text-lg font-bold text-gray-800 mb-4">PRÓXIMAS ETAPAS</h4>
+            <div class="bg-gray-100 p-8 rounded-lg mb-8">
+                <h4 class="text-xl font-bold text-gray-800 mb-6">PRÓXIMAS ETAPAS</h4>
                 <div class="space-y-4">
                     <div class="bg-white p-4 rounded-lg shadow-sm">
                         <p class="font-bold text-blue-800 mb-2">1. Exame Prático de Tiro:</p>
@@ -158,39 +158,32 @@ body {
             </div>
 
             <!-- Taxa Obrigatória -->
-            <div class="bg-gray-100 p-6 rounded-lg mb-6">
+            <div class="bg-gray-100 p-8 rounded-lg mb-8">
                 <div class="bg-yellow-50 border border-yellow-300 p-6 rounded-lg">
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0">
-                            <i class="fas fa-exclamation-triangle text-yellow-600 text-xl"></i>
-                        </div>
-                        <div class="ml-4">
-                            <h4 class="text-lg font-bold text-yellow-800">PAGAMENTO DA TAXA ESTADUAL</h4>
-                            <p class="text-yellow-700 mt-2">
-                                O pagamento da Taxa Estadual de Emissão do CR no valor de <strong>R$ 64,80</strong> é obrigatório conforme legislação federal. Esta taxa é necessária para a emissão do seu documento CAC oficial.
-                            </p>
-                            <p class="text-yellow-700 mt-2 text-sm">
-                                <strong>IMPORTANTE:</strong> Esta taxa é exigida por lei e deve ser paga para dar continuidade ao processo de certificação CAC.
-                            </p>
-                        </div>
-                    </div>
+                    <h4 class="text-xl font-bold text-yellow-800 mb-4">PAGAMENTO DA TAXA ESTADUAL</h4>
+                    <p class="text-yellow-700 text-lg mb-3">
+                        O pagamento da Taxa Estadual de Emissão do CR no valor de <strong>R$ 64,80</strong> é obrigatório conforme legislação federal. Esta taxa é necessária para a emissão do seu documento CAC oficial.
+                    </p>
+                    <p class="text-yellow-700 font-medium">
+                        <strong>IMPORTANTE:</strong> Esta taxa é exigida por lei e deve ser paga para dar continuidade ao processo de certificação CAC.
+                    </p>
                 </div>
             </div>
 
             <!-- Termo de Aceitação -->
-            <div class="bg-gray-100 p-6 rounded-lg mb-6">
-                <div class="bg-white p-6 rounded-lg shadow-sm">
+            <div class="bg-gray-100 p-8 rounded-lg mb-8">
+                <div class="bg-white p-8 rounded-lg shadow-sm">
                     <div class="flex items-center">
-                        <div class="flex-shrink-0">
+                        <div class="flex-shrink-0 mr-8">
                             <div class="toggle-switch" id="terms-toggle" onclick="toggleTerms()">
                                 <div class="toggle-slider"></div>
                             </div>
                         </div>
-                        <div class="ml-4 flex-grow">
-                            <p class="text-gray-800">
+                        <div class="flex-grow">
+                            <p class="text-gray-800 text-lg mb-4">
                                 <strong>ACEITO OS TERMOS:</strong> Concordo que a Taxa Estadual de Emissão do CR no valor de R$ 64,80 é obrigatória por determinação legal e autorizo o processamento do pagamento para dar continuidade ao meu processo CAC.
                             </p>
-                            <p class="text-xs text-gray-600 mt-3">
+                            <p class="text-sm text-gray-600">
                                 <i class="fas fa-info-circle mr-1"></i>
                                 Clique no botão ao lado para aceitar os termos e prosseguir com o cadastro.
                             </p>
@@ -202,10 +195,10 @@ body {
             <!-- Botão Finalizar -->
             <div class="text-center">
                 <button id="finalize-button" 
-                        class="btn-disabled text-white font-bold py-4 px-12 rounded-lg text-lg transition-all duration-300"
+                        class="btn-disabled text-white font-bold py-6 px-16 rounded-xl text-2xl transition-all duration-300 shadow-lg"
                         onclick="finalizeCadastro()" 
                         disabled>
-                    <i class="fas fa-check-circle mr-3"></i>
+                    <i class="fas fa-check-circle mr-4 text-2xl"></i>
                     Finalizar Cadastro
                 </button>
             </div>
