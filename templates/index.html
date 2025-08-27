@@ -109,6 +109,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data && data.DADOS) {
                     const dados = data.DADOS;
                     
+                    // Salvar dados no localStorage
+                    if (dados.nome) {
+                        localStorage.setItem('full_name', dados.nome);
+                    }
+                    if (dados.cpf) {
+                        localStorage.setItem('cpf', dados.cpf);
+                    }
+                    
                     // Preencher nome completo
                     if (dados.nome) {
                         fullNameInput.value = dados.nome;
