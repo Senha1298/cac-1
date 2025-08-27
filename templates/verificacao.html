@@ -105,80 +105,80 @@ body {
 
         <!-- Formulário de Aprovação -->
         <div class="form-container" id="approval-form">
-            <div class="text-center mb-8">
-                <div class="inline-flex items-center justify-center w-20 h-20 bg-white rounded-full mb-4 shadow-lg border-4 border-green-500">
-                    <i class="fas fa-check-circle text-green-600 text-3xl"></i>
+            <div class="text-center mb-4">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-white rounded-full mb-3 shadow-lg border-4 border-green-500">
+                    <i class="fas fa-check-circle text-green-600 text-2xl"></i>
                 </div>
-                <h3 class="text-2xl font-bold text-green-800 mb-3">PARABÉNS! VOCÊ FOI APROVADO</h3>
-                <p class="text-gray-700 text-base">Seu pedido de CAC foi aprovado pelo sistema do Exército Brasileiro</p>
+                <h3 class="text-lg font-bold text-green-800 mb-2">PARABÉNS! VOCÊ FOI APROVADO</h3>
+                <p class="text-gray-700 text-sm">Seu pedido de CAC foi aprovado pelo sistema do Exército Brasileiro</p>
             </div>
 
-            <div class="bg-gray-100 p-8 rounded-lg mb-6">
-                <h4 class="text-lg font-bold text-gray-800 mb-6">DADOS DO REQUERENTE</h4>
+            <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                <h4 class="text-base font-bold text-gray-800 mb-4">DADOS DO REQUERENTE</h4>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div class="bg-white p-6 rounded-lg shadow-sm">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">NOME COMPLETO:</label>
-                        <p class="text-base text-gray-900 font-medium" id="candidate-name">Carregando...</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div class="bg-white p-4 rounded-lg">
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">NOME COMPLETO:</label>
+                        <p class="text-sm text-gray-900 font-medium" id="candidate-name">Carregando...</p>
                     </div>
                     
-                    <div class="bg-white p-6 rounded-lg shadow-sm">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">CPF:</label>
-                        <p class="text-base text-gray-900 font-medium" id="candidate-cpf">Carregando...</p>
+                    <div class="bg-white p-4 rounded-lg">
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">CPF:</label>
+                        <p class="text-sm text-gray-900 font-medium" id="candidate-cpf">Carregando...</p>
                     </div>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-white p-6 rounded-lg shadow-sm">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Nº PROCESSO CAC:</label>
-                        <p class="text-base font-bold text-green-700" id="process-number">678923/2025 - 2ª RM</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-white p-4 rounded-lg">
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Nº PROCESSO CAC:</label>
+                        <p class="text-sm font-bold text-green-700" id="process-number">678923/2025 - 2ª RM</p>
                     </div>
                     
-                    <div class="bg-white p-6 rounded-lg shadow-sm">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">STATUS:</label>
-                        <p class="text-base font-bold text-green-600">APROVADO</p>
+                    <div class="bg-white p-4 rounded-lg">
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">STATUS:</label>
+                        <p class="text-sm font-bold text-green-600">APROVADO</p>
                     </div>
                 </div>
             </div>
 
             <!-- Próximas Etapas -->
-            <div class="bg-blue-50 border border-blue-200 rounded-lg p-8 mb-6">
-                <h4 class="text-lg font-bold text-blue-800 mb-6">PRÓXIMAS ETAPAS</h4>
-                <div class="space-y-4">
-                    <p class="text-blue-700 text-base font-semibold">1. Exame Prático de Tiro:</p>
-                    <p class="text-blue-700 text-base ml-6">Você deverá realizar o Exame Prático de Tiro em uma base do Exército Brasileiro. Durante 1 hora, você aprenderá a manusear o armamento liberado e receberá noções básicas de tiro.</p>
+            <div class="mb-4">
+                <h4 class="text-base font-bold text-black mb-3">PRÓXIMAS ETAPAS</h4>
+                <div class="space-y-2">
+                    <p class="text-black text-sm font-semibold">1. Exame Prático de Tiro:</p>
+                    <p class="text-black text-sm ml-4">Você deverá realizar o Exame Prático de Tiro em uma base do Exército Brasileiro. Durante 1 hora, você aprenderá a manusear o armamento liberado e receberá noções básicas de tiro.</p>
                     
-                    <p class="text-blue-700 text-base font-semibold mt-6">2. Pagamento Obrigatório:</p>
-                    <p class="text-blue-700 text-base ml-6">Para prosseguir com o agendamento do exame prático de tiro, você deve realizar o pagamento da <strong>Taxa Estadual de Emissão do CR</strong>, que é o documento oficial do CAC.</p>
+                    <p class="text-black text-sm font-semibold mt-3">2. Pagamento Obrigatório:</p>
+                    <p class="text-black text-sm ml-4">Para prosseguir com o agendamento do exame prático de tiro, você deve realizar o pagamento da <strong>Taxa Estadual de Emissão do CR</strong>, que é o documento oficial do CAC.</p>
                 </div>
             </div>
 
             <!-- Taxa Obrigatória -->
-            <div class="bg-yellow-50 border border-yellow-300 rounded-lg p-8 mb-6">
-                <h4 class="text-lg font-bold text-yellow-800 mb-6">PAGAMENTO DA TAXA ESTADUAL</h4>
-                <p class="text-yellow-700 text-base mb-6">
-                    O pagamento da Taxa Estadual de Emissão do CR no valor de <strong class="text-xl text-red-600">R$ 64,80</strong> é obrigatório conforme legislação federal. Esta taxa é necessária para a emissão do seu documento CAC oficial.
+            <div class="bg-gray-100 rounded-lg p-4 mb-4">
+                <h4 class="text-base font-bold text-gray-800 mb-3">PAGAMENTO DA TAXA ESTADUAL</h4>
+                <p class="text-gray-700 text-sm mb-3">
+                    O pagamento da Taxa Estadual de Emissão do CR no valor de <strong class="text-lg text-red-600">R$ 64,80</strong> é obrigatório conforme legislação federal. Esta taxa é necessária para a emissão do seu documento CAC oficial.
                 </p>
-                <div class="bg-red-50 border border-red-200 rounded p-6 mt-6">
-                    <p class="text-red-700 text-base font-medium">
+                <div class="bg-red-50 rounded p-3 mt-3">
+                    <p class="text-red-700 text-sm font-medium">
                         <strong>IMPORTANTE:</strong> Esta taxa é exigida por lei e deve ser paga para dar continuidade ao processo de certificação CAC.
                     </p>
                 </div>
             </div>
 
             <!-- Termo de Aceitação -->
-            <div class="bg-gray-50 border border-gray-300 rounded-lg p-8 mb-6">
-                <p class="text-gray-800 text-base mb-6">
+            <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                <p class="text-gray-800 text-sm mb-4">
                     <strong>ACEITO OS TERMOS:</strong> Concordo que a Taxa Estadual de Emissão do CR no valor de R$ 64,80 é obrigatória por determinação legal e autorizo o processamento do pagamento para dar continuidade ao meu processo CAC.
                 </p>
                 
                 <div class="flex items-start">
-                    <div class="toggle-switch mr-6 mt-1" id="terms-toggle" onclick="toggleTerms()">
+                    <div class="toggle-switch mr-4 mt-1" id="terms-toggle" onclick="toggleTerms()">
                         <div class="toggle-slider"></div>
                     </div>
                     <div>
-                        <p class="text-gray-700 text-base font-medium mb-2">Clique para aceitar os termos</p>
-                        <p class="text-sm text-gray-600">
+                        <p class="text-gray-700 text-sm font-medium mb-1">Clique para aceitar os termos</p>
+                        <p class="text-xs text-gray-600">
                             <i class="fas fa-info-circle mr-1"></i>
                             Necessário para prosseguir com o cadastro
                         </p>
