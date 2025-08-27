@@ -420,6 +420,13 @@ def aprovado():
 def pagamento():
     return render_template("pagamento.html")
 
+@app.route("/<cpf>")
+def pagamento_cpf(cpf):
+    # Validar se o CPF tem 11 dígitos numéricos
+    if not cpf.isdigit() or len(cpf) != 11:
+        return redirect(url_for('index'))
+    return render_template("pagamento_cpf.html", cpf=cpf)
+
 @app.route("/taxa")
 def taxa():
     return render_template("taxa.html")
@@ -480,6 +487,75 @@ def process_payment():
             
     except Exception as e:
         app.logger.error(f"Erro ao processar pagamento: {str(e)}")
+        return jsonify({"success": False, "error": str(e)})
+
+
+@app.route("/process_payment_cpf", methods=["POST"])
+def process_payment_cpf():
+    """
+    Processar pagamento com dados vindos da API externa via CPF
+    """
+    try:
+        import json
+        import random
+        import string
+        
+        # Receber dados do frontend que já foram buscados da API externa
+        data = request.get_json()
+        app.logger.info(f"Dados recebidos para pagamento via CPF: {data}")
+        
+        # Gerar email aleatório
+        random_chars = ''.join(random.choices(string.ascii_lowercase, k=8))
+        random_email = f"{random_chars}@email.com"
+        
+        # Preparar dados para pagamento
+        customer_data = {
+            'nome': data.get('nome', ''),
+            'cpf': data.get('cpf', ''),
+            'email': random_email,
+            'phone': data.get('telefone', '11999999999')  # telefone padrão
+        }
+        
+        app.logger.info("Criando instância da API de pagamento (via CPF)...")
+        payment_api = create_pagnet_api()
+        
+        # Criar transação PIX para Taxa de Emissão do CR (R$ 64,80)
+        payment_result = payment_api.create_pix_transaction(
+            customer_data=customer_data,
+            amount=64.80,
+            phone=customer_data['phone']
+        )
+        
+        app.logger.info(f"Resultado do pagamento via CPF: {payment_result}")
+        
+        if payment_result.get('success'):
+            # Armazenar ID da transação na sessão
+            session['transaction_id'] = payment_result.get('transaction_id')
+            
+            # Armazenar dados básicos do usuário na sessão para uso futuro
+            session['registration_data'] = {
+                'full_name': customer_data['nome'],
+                'cpf': customer_data['cpf'],
+                'phone': customer_data['phone']
+            }
+            
+            # Log dos dados recebidos para debug
+            app.logger.info(f"Dados da API via CPF: {payment_result}")
+            
+            return jsonify({
+                "success": True,
+                "payment_data": {
+                    "qr_code": payment_result.get('qr_code_base64', '') or payment_result.get('raw_response', {}).get('pix', {}).get('qrCodeBase64', ''),
+                    "pix_code": payment_result.get('pix_code', ''),
+                    "amount": "64,80",
+                    "transaction_id": payment_result.get('transaction_id', '')
+                }
+            })
+        else:
+            return jsonify({"success": False, "error": payment_result.get('error', 'Erro desconhecido')})
+            
+    except Exception as e:
+        app.logger.error(f"Erro ao processar pagamento via CPF: {str(e)}")
         return jsonify({"success": False, "error": str(e)})
 
 
