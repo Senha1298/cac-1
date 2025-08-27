@@ -6,14 +6,15 @@ body {
     background-color: #fff !important;
 }
 
-/* Garantir que o spinner funcione */
-@keyframes spin {
+/* Spinner customizado que vai funcionar */
+@keyframes spinRotate {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
 
+/* Reset qualquer interferência */
 .animate-spin {
-    animation: spin 1s linear infinite !important;
+    animation: spinRotate 1s linear infinite !important;
 }
 
 /* Garantir visibilidade dos textos */
@@ -25,9 +26,9 @@ body {
         <!-- Formulário CAC -->
         <div class="mb-6" style="text-align: left;">
                 <!-- Spinner de status -->
-                <div class="text-center mb-6" style="display: block !important; visibility: visible !important;">
-                    <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 mb-2" style="border-color: #DC9D33 !important; border-bottom-color: #DC9D33 !important; border-top-color: transparent !important; border-left-color: transparent !important; border-right-color: transparent !important; animation: spin 1s linear infinite !important;"></div>
-                    <p class="text-base font-semibold" style="color: #DC9D33 !important;">Aguardando Pagamento</p>
+                <div style="text-align: center; margin-bottom: 24px; display: block !important;">
+                    <div style="width: 32px; height: 32px; border: 3px solid transparent; border-top: 3px solid #DC9D33; border-radius: 50%; display: inline-block; animation: spinRotate 1s linear infinite; margin-bottom: 8px;"></div>
+                    <p style="color: #DC9D33; font-weight: 600; font-size: 16px; margin: 0;">Aguardando Pagamento</p>
                 </div>
                 
                 <div style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #e5e7eb;">
