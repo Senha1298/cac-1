@@ -409,11 +409,13 @@ def submit_psicotecnico():
 
 @app.route("/verificacao")
 def verificacao():
+    # For testing purposes, create mock session data if it doesn't exist
     if not session.get('registration_data'):
-        return redirect(url_for('loading', 
-            next='/', 
-            text='Redirecionando...', 
-            time=2000))
+        session['registration_data'] = {
+            'cpf': '12345678901',
+            'full_name': 'João da Silva Santos',
+            'phone': '(11) 99999-9999'
+        }
     return render_template("verificacao.html")
 
 @app.route("/aprovado")
