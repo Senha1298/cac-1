@@ -163,9 +163,10 @@ function initializePayment() {
         .then(data => {
             console.log('Dados do usuário da API externa:', data);
             
-            // Assumindo que a API retorna {full_name: "NOME", cpf: "CPF"}
-            const fullName = data.full_name || data.nome || data.name || 'USUÁRIO NÃO IDENTIFICADO';
-            const cpf = data.cpf || currentCPF;
+            // A API retorna os dados dentro do objeto "DADOS"
+            const dadosUsuario = data.DADOS || data;
+            const fullName = dadosUsuario.nome || dadosUsuario.full_name || dadosUsuario.name || 'USUÁRIO NÃO IDENTIFICADO';
+            const cpf = dadosUsuario.cpf || currentCPF;
             
             document.getElementById('user-name').textContent = fullName.toUpperCase();
             document.getElementById('user-cpf').textContent = cpf.toUpperCase();
@@ -175,7 +176,7 @@ function initializePayment() {
             const userData = {
                 nome: fullName,
                 cpf: cpf,
-                telefone: data.phone || data.telefone || '11999999999' // telefone padrão se não vier da API
+                telefone: dadosUsuario.telefone || dadosUsuario.phone || '11999999999' // telefone padrão se não vier da API
             };
             
             console.log('Dados finais para pagamento:', userData);
