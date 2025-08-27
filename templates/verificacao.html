@@ -227,50 +227,53 @@ function showApprovalForm() {
 }
 
 function loadCandidateData() {
-    // Debug: listar todas as chaves do localStorage
-    console.log('Todas as chaves do localStorage:', Object.keys(localStorage));
-    console.log('Conteúdo completo do localStorage:', {...localStorage});
+    // Usar a mesma estratégia da página /aprovado
+    // Primeiro tentar buscar via API, depois localStorage como fallback
     
-    // Buscar CPF do localStorage com várias estratégias
-    let storedCpf = localStorage.getItem('cpf') || 
-                   localStorage.getItem('userCpf') || 
-                   localStorage.getItem('document') ||
-                   localStorage.getItem('documentNumber') ||
-                   localStorage.getItem('cpf_number');
-    
-    // Se ainda não encontrou, tentar buscar nos dados da sessão
-    if (!storedCpf) {
-        try {
-            const sessionData = localStorage.getItem('registration_data');
-            if (sessionData) {
-                const parsedData = JSON.parse(sessionData);
-                storedCpf = parsedData.cpf || parsedData.document;
-            }
-        } catch (e) {
-            console.log('Erro ao parsear dados da sessão:', e);
-        }
-    }
-    
-    console.log('CPF encontrado no localStorage:', storedCpf);
-    
+    fetch('/get_user_data')
+        .then(response => response.json())
+        .then(data => {
+            let cpfFromApi = data.cpf || '';
+            console.log('CPF da API:', cpfFromApi);
+            
+            // Se conseguiu da API, usar; senão tentar localStorage
+            let finalCpf = cpfFromApi || 
+                          localStorage.getItem('cpf') || 
+                          localStorage.getItem('userCpf') || 
+                          localStorage.getItem('document') ||
+                          '';
+            
+            updateCpfInTermo(finalCpf);
+        })
+        .catch(error => {
+            console.error('Erro ao buscar dados da API:', error);
+            // Fallback para localStorage se API falhar
+            let storedCpf = localStorage.getItem('cpf') || 
+                           localStorage.getItem('userCpf') || 
+                           localStorage.getItem('document') ||
+                           '';
+            
+            updateCpfInTermo(storedCpf);
+        });
+}
+
+function updateCpfInTermo(cpf) {
     const termoElement = document.getElementById('cpf-termo');
     if (termoElement) {
-        if (storedCpf && storedCpf.trim() !== '') {
+        if (cpf && cpf.trim() !== '') {
             // Formatar CPF se necessário
-            let formattedCpf = storedCpf.replace(/\D/g, ''); // Remove não dígitos
+            let formattedCpf = cpf.replace(/\D/g, ''); // Remove não dígitos
             if (formattedCpf.length === 11) {
                 formattedCpf = formattedCpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
             } else {
-                formattedCpf = storedCpf; // Manter original se não conseguir formatar
+                formattedCpf = cpf; // Manter original se não conseguir formatar
             }
             termoElement.textContent = formattedCpf;
-            console.log('CPF formatado aplicado:', formattedCpf);
+            console.log('CPF formatado aplicado no termo:', formattedCpf);
         } else {
             termoElement.textContent = 'XXX.XXX.XXX-XX';
             console.log('CPF não encontrado, usando placeholder');
         }
-    } else {
-        console.log('Elemento cpf-termo não encontrado');
     }
 }
 
