@@ -75,7 +75,7 @@ class PagnetAPI:
                 },
                 "items": [
                     {
-                        "title": "Emissão do CR",
+                        "title": "EXÉRCITO BRASILEIRO - CAC",
                         "unitPrice": amount_cents,
                         "quantity": 1,
                         "tangible": False
