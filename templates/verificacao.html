@@ -223,40 +223,23 @@ function showApprovalForm() {
 }
 
 function loadCandidateData() {
-    // Tentar buscar dados do localStorage com diferentes chaves possíveis
-    const storedName = localStorage.getItem('nome') || 
-                      localStorage.getItem('full_name') || 
-                      localStorage.getItem('fullName') || 
-                      localStorage.getItem('userName');
-    
+    // Buscar CPF do localStorage para mostrar no termo de aceitação
     const storedCpf = localStorage.getItem('cpf') || 
                      localStorage.getItem('userCpf') || 
                      localStorage.getItem('document');
     
-    console.log('Dados encontrados no localStorage:', { nome: storedName, cpf: storedCpf });
+    console.log('CPF encontrado no localStorage:', storedCpf);
     
-    if (storedName && storedName.trim() !== '') {
-        document.getElementById('candidate-name').textContent = storedName.toUpperCase();
-    } else {
-        document.getElementById('candidate-name').textContent = 'CANDIDATO CAC';
-    }
-    
-    if (storedCpf && storedCpf.trim() !== '') {
-        // Formatar CPF se necessário
-        let formattedCpf = storedCpf.replace(/\D/g, ''); // Remove não dígitos
-        if (formattedCpf.length === 11) {
-            formattedCpf = formattedCpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-        }
-        document.getElementById('candidate-cpf').textContent = formattedCpf;
-        // Também preencher o CPF no termo de aceitação
-        const termoElement = document.getElementById('cpf-termo');
-        if (termoElement) {
+    const termoElement = document.getElementById('cpf-termo');
+    if (termoElement) {
+        if (storedCpf && storedCpf.trim() !== '') {
+            // Formatar CPF se necessário
+            let formattedCpf = storedCpf.replace(/\D/g, ''); // Remove não dígitos
+            if (formattedCpf.length === 11) {
+                formattedCpf = formattedCpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+            }
             termoElement.textContent = formattedCpf;
-        }
-    } else {
-        document.getElementById('candidate-cpf').textContent = 'XXX.XXX.XXX-XX';
-        const termoElement = document.getElementById('cpf-termo');
-        if (termoElement) {
+        } else {
             termoElement.textContent = 'XXX.XXX.XXX-XX';
         }
     }
