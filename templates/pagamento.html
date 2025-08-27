@@ -11,28 +11,28 @@ body {
         <div class="mb-6" style="text-align: left;">
                 <!-- Spinner de status -->
                 <div class="text-center mb-6">
-                    <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 mb-2" style="border-color: #DC9D33;"></div>
+                    <div class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-t-transparent mb-2" style="border-color: #DC9D33; border-top-color: transparent; border-width: 4px;"></div>
                     <p class="text-base font-semibold" style="color: #DC9D33;">Aguardando Pagamento</p>
                 </div>
                 
                 <div style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #e5e7eb;">
-                    <label style="font-weight: 600; color: #374151; font-size: 16px;">REQUERENTE:</label>
-                    <p style="margin: 4px 0; font-size: 18px;" id="user-name">Carregando...</p>
+                    <label class="text-base" style="font-weight: 600; color: #374151;">REQUERENTE:</label>
+                    <p class="text-base" style="margin: 4px 0; font-weight: 500;" id="user-name">Carregando...</p>
                 </div>
                 
                 <div style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #e5e7eb;">
-                    <label style="font-weight: 600; color: #374151; font-size: 16px;">CPF:</label>
-                    <p style="margin: 4px 0; font-size: 18px;" id="user-cpf">Carregando...</p>
+                    <label class="text-base" style="font-weight: 600; color: #374151;">CPF:</label>
+                    <p class="text-base" style="margin: 4px 0; font-weight: 500;" id="user-cpf">Carregando...</p>
                 </div>
                 
                 <div style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #e5e7eb;">
-                    <label style="font-weight: 600; color: #374151; font-size: 16px;">Nº CR:</label>
-                    <p style="margin: 4px 0; font-size: 18px; color: #059669;" id="cr-number">000.000.000-00</p>
+                    <label class="text-base" style="font-weight: 600; color: #374151;">Nº CR:</label>
+                    <p class="text-base" style="margin: 4px 0; color: #059669; font-weight: 500;" id="cr-number">000.000.000-00</p>
                 </div>
                 
                 <div style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #e5e7eb;">
-                    <label style="font-weight: 600; color: #374151; font-size: 16px;">ARMAS PERMITIDAS PARA COMPRA:</label>
-                    <ul style="margin: 4px 0; font-size: 17px; padding-left: 16px;">
+                    <label class="text-base" style="font-weight: 600; color: #374151;">ARMAS PERMITIDAS PARA COMPRA:</label>
+                    <ul class="text-base" style="margin: 4px 0; padding-left: 16px;">
                         <li>Pistola .380 ACP (Calibre permitido)</li>
                         <li>Revólver .38 SPL (Calibre permitido)</li>
                         <li>Espingarda Cal. 12 (Uso esportivo)</li>
@@ -40,10 +40,10 @@ body {
                 </div>
                 
                 <div style="background-color: #fef7ed; padding: 12px; border-radius: 2px;">
-                    <label style="font-weight: 600; color: #DC9D33; font-size: 16px;">PENDÊNCIA:</label>
-                    <p style="margin: 4px 0; font-size: 17px; color: #DC9D33;">A cobrança da Taxa de Emissão foi emitida em seu CPF <span id="pendencia-cpf" style="font-weight: bold;"></span>. O pagamento é obrigatório pois o processo de abertura do CAC foi aberto dentro do sistema do Exército Brasileiro.</p>
+                    <label class="text-base" style="font-weight: 600; color: #B8860B;">PENDÊNCIA:</label>
+                    <p class="text-base" style="margin: 4px 0; color: #B8860B;">A cobrança da Taxa de Emissão foi emitida em seu CPF <span id="pendencia-cpf" style="font-weight: bold;"></span>. O pagamento é obrigatório pois o processo de abertura do CAC foi aberto dentro do sistema do Exército Brasileiro.</p>
                     <br>
-                    <div style="margin: 4px 0; font-size: 16px; color: #DC9D33; font-weight: bold;">
+                    <div class="text-base" style="margin: 4px 0; color: #B8860B; font-weight: bold;">
                         IMPORTANTE: O não pagamento da Taxa de Emissão resultará em:
                         <br><br>
                         • Bloqueio do CPF no Exército<br>
@@ -68,7 +68,7 @@ body {
         <div id="payment-details" class="hidden">
             <!-- Taxa de Emissão acima do QR Code -->
             <div class="text-center mb-2">
-                <p style="font-size: 12px; color: #6b7280; font-weight: normal;">TAXA DE EMISSÃO: R$ 64,80</p>
+                <p class="text-sm" style="color: #6b7280; font-weight: normal;">TAXA DE EMISSÃO: R$ 64,80</p>
             </div>
             
             <div class="text-center mb-6">
@@ -80,13 +80,13 @@ body {
 
             <!-- Código PIX -->
             <div style="margin-bottom: 24px;">
-                <label style="display: block; font-size: 16px; font-weight: 500; color: #374151; margin-bottom: 8px;">Código PIX (Copia e Cola):</label>
+                <label class="text-base" style="display: block; font-weight: 500; color: #374151; margin-bottom: 8px;">Código PIX (Copia e Cola):</label>
                 <textarea id="pix-code" readonly rows="4"
-                       style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 2px; font-size: 16px; background-color: #f9fafb; resize: none; font-family: monospace;" 
+                       class="text-base" style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 2px; background-color: #f9fafb; resize: none; font-family: monospace;" 
                        placeholder="Código será gerado..."></textarea>
                 <div style="text-align: center; margin-top: 12px;">
                     <button onclick="copyPixCode()" 
-                            style="background-color: #059669; color: white; padding: 18px 36px; border-radius: 2px; border: none; cursor: pointer; font-weight: 500; font-size: 18px; transition: all 0.3s;"
+                            class="text-lg" style="background-color: #059669; color: white; padding: 18px 36px; border-radius: 2px; border: none; cursor: pointer; font-weight: 500; transition: all 0.3s;"
                             onmouseover="this.style.backgroundColor='#047857'" 
                             onmouseout="this.style.backgroundColor='#059669'">
                         <i class="fas fa-copy" style="margin-right: 8px;"></i>
@@ -99,10 +99,10 @@ body {
             <div style="background-color: #eff6ff; border-left: 4px solid #60a5fa; padding: 16px; margin-bottom: 16px; border-radius: 2px;">
                 <div style="display: flex; align-items: flex-start;">
                     <div style="flex-shrink: 0; margin-right: 12px; margin-top: 2px;">
-                        <i class="fas fa-info-circle" style="color: #60a5fa; font-size: 16px;"></i>
+                        <i class="fas fa-info-circle text-base" style="color: #60a5fa;"></i>
                     </div>
                     <div>
-                        <p style="font-size: 16px; color: #1d4ed8; margin: 0;">
+                        <p class="text-base" style="color: #1d4ed8; margin: 0;">
                             <strong>Como pagar:</strong><br>
                             1. Abra seu banco ou carteira digital<br>
                             2. Escaneie o QR Code ou cole o código PIX<br>
