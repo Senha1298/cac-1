@@ -1,0 +1,153 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="page-header">
+        <h1>Registro de Certificado CAC</h1>
+        <p>Sistema de Cadastro para Certificado de Registro de Colecionador, Atirador e Caçador</p>
+        <div class="divider"></div>
+    </div>
+
+    <div class="card mb-8">
+        <div style="margin-bottom: 24px;">
+            <h2 class="card-title">Endereço para Registro CAC</h2>
+            <p class="card-description">
+                Por favor, preencha o formulário abaixo com o endereço onde as armas serão armazenadas. Este endereço deve ser o local seguro e adequado para o armazenamento das armas, conforme as regulamentações do Exército Brasileiro.
+            </p>
+        </div>
+
+        <form method="POST" style="width: 100%; max-width: 600px; margin: 0 auto;">
+            <div style="margin-bottom: 20px;">
+                <label for="zip_code" style="display: block; font-weight: bold; color: #1f2937; font-size: 14px; margin-bottom: 8px;">CEP *</label>
+                <input type="text" id="zip_code" name="zip_code" required
+                    inputmode="numeric"
+                    pattern="\d{5}-?\d{3}"
+                    maxlength="9"
+                    style="width: 100%; height: 48px; padding: 0 16px; border: 1px solid #d1d5db; border-radius: 2px; font-size: 16px; background: white;">
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label for="address" style="display: block; font-weight: bold; color: #1f2937; font-size: 14px; margin-bottom: 8px;">Endereço *</label>
+                <input type="text" id="address" name="address" required
+                    style="width: 100%; height: 48px; padding: 0 16px; border: 1px solid #d1d5db; border-radius: 2px; font-size: 16px; background: white;">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+                <div>
+                    <label for="number" style="display: block; font-weight: bold; color: #1f2937; font-size: 14px; margin-bottom: 8px;">Número *</label>
+                    <input type="text" id="number" name="number" required
+                        style="width: 100%; height: 48px; padding: 0 16px; border: 1px solid #d1d5db; border-radius: 2px; font-size: 16px; background: white;">
+                </div>
+                <div>
+                    <label for="complement" style="display: block; font-weight: bold; color: #1f2937; font-size: 14px; margin-bottom: 8px;">Complemento</label>
+                    <input type="text" id="complement" name="complement"
+                        style="width: 100%; height: 48px; padding: 0 16px; border: 1px solid #d1d5db; border-radius: 2px; font-size: 16px; background: white;">
+                </div>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label for="neighborhood" style="display: block; font-weight: bold; color: #1f2937; font-size: 14px; margin-bottom: 8px;">Bairro *</label>
+                <input type="text" id="neighborhood" name="neighborhood" required
+                    style="width: 100%; height: 48px; padding: 0 16px; border: 1px solid #d1d5db; border-radius: 2px; font-size: 16px; background: white;">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+                <div>
+                    <label for="city" style="display: block; font-weight: bold; color: #1f2937; font-size: 14px; margin-bottom: 8px;">Cidade *</label>
+                    <input type="text" id="city" name="city" required
+                        style="width: 100%; height: 48px; padding: 0 16px; border: 1px solid #d1d5db; border-radius: 2px; font-size: 16px; background: white;">
+                </div>
+                <div>
+                    <label for="state" style="display: block; font-weight: bold; color: #1f2937; font-size: 14px; margin-bottom: 8px;">Estado *</label>
+                    <select id="state" name="state" required
+                        style="width: 100%; height: 48px; padding: 0 16px; border: 1px solid #d1d5db; border-radius: 2px; font-size: 16px; background: white;">
+                        <option value="">Selecione...</option>
+                        <option value="AC">Acre</option>
+                        <option value="AL">Alagoas</option>
+                        <option value="AP">Amapá</option>
+                        <option value="AM">Amazonas</option>
+                        <option value="BA">Bahia</option>
+                        <option value="CE">Ceará</option>
+                        <option value="DF">Distrito Federal</option>
+                        <option value="ES">Espírito Santo</option>
+                        <option value="GO">Goiás</option>
+                        <option value="MA">Maranhão</option>
+                        <option value="MT">Mato Grosso</option>
+                        <option value="MS">Mato Grosso do Sul</option>
+                        <option value="MG">Minas Gerais</option>
+                        <option value="PA">Pará</option>
+                        <option value="PB">Paraíba</option>
+                        <option value="PR">Paraná</option>
+                        <option value="PE">Pernambuco</option>
+                        <option value="PI">Piauí</option>
+                        <option value="RJ">Rio de Janeiro</option>
+                        <option value="RN">Rio Grande do Norte</option>
+                        <option value="RS">Rio Grande do Sul</option>
+                        <option value="RO">Rondônia</option>
+                        <option value="RR">Roraima</option>
+                        <option value="SC">Santa Catarina</option>
+                        <option value="SP">São Paulo</option>
+                        <option value="SE">Sergipe</option>
+                        <option value="TO">Tocantins</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="bg-gray-50 p-4 rounded-md border border-gray-200">
+                <h3 class="text-sm font-medium text-gray-700 mb-2">Termo de Responsabilidade</h3>
+                <p class="text-sm text-gray-600">
+                    Ao prosseguir com o cadastro, declaro que todas as informações fornecidas são verdadeiras e que o endereço informado é o local onde as armas serão armazenadas, estando ciente das responsabilidades legais associadas ao registro de CAC e ao armazenamento seguro de armas, conforme estabelecido pela Lei nº 10.826/2003 (Estatuto do Desarmamento) e suas regulamentações.
+                </p>
+            </div>
+
+            <div>
+                <button type="submit" class="btn-military btn-military-large w-full">
+                    <i class="fas fa-arrow-right mr-2"></i>Continuar Cadastro
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const cepInput = document.getElementById('zip_code');
+    const addressInput = document.getElementById('address');
+    const neighborhoodInput = document.getElementById('neighborhood');
+    const cityInput = document.getElementById('city');
+    const stateInput = document.getElementById('state');
+
+    cepInput.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length <= 8) {
+            value = value.replace(/(\d{5})(\d{3})/, function(regex, arg1, arg2) {
+                if (arg2) return `${arg1}-${arg2}`;
+                return arg1;
+            });
+            e.target.value = value;
+
+            // Se o CEP estiver completo (8 dígitos), busca o endereço
+            if (value.replace(/\D/g, '').length === 8) {
+                const cepSemPontuacao = value.replace(/\D/g, '');
+                const apiUrl = `https://viacep.com.br/ws/${cepSemPontuacao}/json/`;
+
+                fetch(apiUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.erro) {
+                            addressInput.value = data.logradouro;
+                            neighborhoodInput.value = data.bairro;
+                            cityInput.value = data.localidade;
+                            stateInput.value = data.uf;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro ao buscar CEP:', error);
+                    });
+            }
+        }
+    });
+});
+</script>
+
+{% endblock %}

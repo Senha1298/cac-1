@@ -1,0 +1,184 @@
+/* Font definitions */
+@font-face {
+    font-family: 'Rawline';
+    src: url('/static/fonts/rawline-400.ea42a37247439622.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Rawline';
+    src: url('/static/fonts/rawline-500.f8af4ec801afaa28.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Rawline';
+    src: url('/static/fonts/rawline-600.844a17f0db94d147.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Rawline';
+    src: url('/static/fonts/rawline-700.1c7c76152b40409f.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Rawline';
+    src: url('/static/fonts/rawline-800.5c5f78761d00551b.woff2') format('woff2');
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Base styles */
+:root {
+    --military-green: #2D5A27;
+    --military-dark: #1A3B19;
+    --military-light: #4A7A44;
+}
+
+/* Base font settings */
+*, *::before, *::after {
+    font-family: 'Rawline', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+/* Typography scale */
+.text-sm {
+    font-family: 'Rawline', sans-serif !important;
+    font-weight: 400;
+}
+
+.font-medium {
+    font-family: 'Rawline', sans-serif !important;
+    font-weight: 500;
+}
+
+.font-semibold {
+    font-family: 'Rawline', sans-serif !important;
+    font-weight: 600;
+}
+
+.font-bold {
+    font-family: 'Rawline', sans-serif !important;
+    font-weight: 700;
+}
+
+.font-extrabold {
+    font-family: 'Rawline', sans-serif !important;
+    font-weight: 800;
+}
+
+/* Military specific styles */
+.military-button {
+    background-color: var(--military-green);
+    color: white;
+    transition: background-color 0.2s;
+}
+
+.military-button:hover {
+    background-color: var(--military-dark);
+}
+
+/* Form styles */
+.form-input {
+    border-color: #E5E7EB;
+    border-radius: 2px;
+    padding: 0.5rem 0.75rem;
+    width: 100%;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--military-green);
+    box-shadow: 0 0 0 3px rgba(74, 122, 68, 0.1);
+}
+
+/* Custom loading spinner */
+.loading-spinner {
+    border: 4px solid rgba(45, 90, 39, 0.1);
+    border-left-color: var(--military-green);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Military specific shadows */
+.military-shadow {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+
+/* Print styles */
+@media print {
+    .no-print {
+        display: none;
+    }
+
+    body {
+        font-size: 12pt;
+        color: #000;
+    }
+}
+
+/* Custom utility classes */
+.military-green {
+    background-color: #2D5A27;
+}
+
+.military-green-dark {
+    background-color: #1A3B19;
+}
+
+.form-input-error {
+    border-color: #DC2626;
+}
+
+.loading-indicator {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Heading styles */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Rawline', sans-serif !important;
+    font-weight: 700;
+}
+
+/* Form labels and text */
+label, input, select, textarea {
+    font-family: 'Rawline', sans-serif !important;
+    font-weight: 400;
+}

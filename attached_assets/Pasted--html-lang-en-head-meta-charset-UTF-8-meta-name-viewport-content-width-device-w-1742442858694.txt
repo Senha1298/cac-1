@@ -1,0 +1,79 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro CAC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .button-3d {
+            box-shadow: 0 4px 0 #9a1c1c;
+            transform: translateY(-2px);
+            transition: all 0.1s;
+        }
+        .button-3d:active {
+            box-shadow: 0 1px 0 #9a1c1c;
+            transform: translateY(0);
+        }
+        .text-shadow {
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        @keyframes moveLeftRight {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
+        }
+        .animate-left-right {
+            animation: moveLeftRight 1.5s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="container mx-auto p-6 max-w-md">
+        <h1 class="text-[18px] font-bold text-gray-800 mb-6">Para concluir seu Registro CAC verifique os Requisitos abaixo:</h1>
+
+        <div class="relative">
+            <!-- Vertical bar -->
+            <div class="absolute left-4 top-0 bottom-0 w-1 bg-gradient-to-b from-[#21C55D] to-[#21C55D]" style="background-size: 100% 45%;"></div>
+            <div class="absolute left-4 top-0 bottom-0 w-1 bg-gray-300" style="top: 45%;"></div>
+
+            <!-- Content -->
+            <div class="space-y-4 pl-11">
+                <!-- Approved items -->
+                <div class="bg-[#21C55D] bg-opacity-20 rounded-[4px] p-4 flex items-center -ml-1" style="margin-right: 20px;">
+                    <img src="https://png.pngtree.com/png-vector/20220812/ourmid/pngtree-check-3d-icon-png-image_6108005.png" alt="Check icon" class="w-10 h-10 mr-4 drop-shadow-md absolute -left-1">
+                    <span class="text-[16px] text-gray-800 font-medium">Aprovação no exame teórico</span>
+                </div>
+
+                <div class="bg-[#21C55D] bg-opacity-20 rounded-[4px] p-4 flex items-center -ml-1" style="margin-right: 20px;">
+                    <img src="https://png.pngtree.com/png-vector/20220812/ourmid/pngtree-check-3d-icon-png-image_6108005.png" alt="Check icon" class="w-10 h-10 mr-4 drop-shadow-md absolute -left-1">
+                    <span class="text-[16px] text-gray-800 font-medium">Avaliação psicológica</span>
+                </div>
+
+                <div class="bg-[#21C55D] bg-opacity-20 rounded-[4px] p-4 flex items-center -ml-1" style="margin-right: 20px;">
+                    <img src="https://png.pngtree.com/png-vector/20220812/ourmid/pngtree-check-3d-icon-png-image_6108005.png" alt="Check icon" class="w-10 h-10 mr-4 drop-shadow-md absolute -left-1">
+                    <span class="text-[16px] text-gray-800 font-medium">Comprovante de residência</span>
+                </div>
+
+                <!-- Pending item -->
+                <div class="bg-red-100 rounded-[4px] p-4">
+                    <div class="flex items-center">
+                        <img src="https://static.vecteezy.com/system/resources/previews/017/209/854/non_2x/red-wrong-3d-ui-icon-free-png.png" alt="X icon" class="w-12 h-12 mr-4 drop-shadow-md absolute -left-2">
+                        <span class="text-[16px] text-gray-800 font-medium">Emitir Certidão de Antecedentes Criminais</span>
+                    </div>
+                    <button class="bg-red-600 text-white font-bold py-2 px-4 rounded-[4px] mt-3 hover:bg-red-700 transition button-3d text-shadow animate-left-right">
+                        EMITIR AGORA
+                    </button>
+                </div>
+
+                <!-- Upcoming item -->
+                <div class="bg-gray-200 rounded-[4px] p-4 flex items-center -ml-1" style="margin-right: 20px;">
+                    <img src="https://icones.pro/wp-content/uploads/2021/02/icone-de-tique-ronde-grise.png" alt="Check icon" class="w-7 h-7 mr-4 drop-shadow-md absolute left-0">
+                    <span class="text-[16px] text-gray-800 font-medium">Finalizar Registro</span>
+                </div>
+                <p class="text-[12px] text-gray-600 mt-1">
+                    Após a emissão da <strong>Certidão de Antecedentes Criminais</strong>, o usuário poderá <strong>finalizar o cadastro CAC</strong>. Subsequentemente, será necessário <strong>agendar um exame de tiro prático</strong> na unidade militar mais próxima à sua residência para obtenção do <strong>Certificado de Registro</strong>.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

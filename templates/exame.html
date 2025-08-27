@@ -1,0 +1,303 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="max-w-[1800px] mx-auto px-4">
+    <div class="page-header">
+        <h1>Registro de Certificado CAC</h1>
+        <p>Sistema de Cadastro para Certificado de Registro de Colecionador, Atirador e Caçador</p>
+        <div class="divider"></div>
+    </div>
+
+    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 rounded-lg" style="border-radius: 2px;">
+        <div>
+            <h2 class="text-lg font-semibold text-yellow-800 mb-2">Questionário para Registro de CAC</h2>
+            <p class="text-yellow-700 text-sm leading-relaxed">
+                Este questionário faz parte do processo de avaliação para obtenção do registro de Colecionador, Atirador e Caçador (CAC). 
+                Por favor, responda todas as perguntas com sinceridade. Suas respostas serão analisadas pelas autoridades competentes.
+            </p>
+        </div>
+    </div>
+
+    <div class="card">
+        <form id="cac-questionario" class="flex flex-col min-h-[400px]">
+            <div id="question-container" class="flex-grow opacity-100 transition-opacity duration-300">
+                <!-- Questions will be dynamically inserted here -->
+            </div>
+
+            <div class="flex items-center justify-between pt-6 mt-6 border-t border-gray-200">
+                <button id="prev-button" class="btn-secondary-std" type="button" style="display: none;">
+                    <i class="fas fa-arrow-left mr-2"></i>Anterior
+                </button>
+                <div class="flex-grow"></div>
+                <button id="next-button" class="btn-military" type="button">
+                    <i class="fas fa-arrow-right mr-2"></i>Próxima
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .checkbox-custom {
+        width: 20px;
+        height: 20px;
+        border: 2px solid var(--military-green);
+        border-radius: 50%;
+        margin-right: 16px;
+        margin-top: 2px;
+        position: relative;
+        flex-shrink: 0;
+    }
+
+    .radio-button:checked + label .checkbox-custom::after {
+        content: '';
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        background-color: var(--military-green);
+        border-radius: 50%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .radio-button:checked + label {
+        background-color: #dcfce7;
+        border: 2px solid var(--military-green);
+    }
+
+    .question-wrapper {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .question-wrapper h2 {
+        flex-shrink: 0;
+        padding: 0;
+        margin-bottom: 0.25rem;
+    }
+
+    .question-wrapper > div {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 0;
+        gap: 0.125rem;
+    }
+
+    .option-button {
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        transition: all 0.2s;
+        min-height: 3.5rem !important; /* Minimum height, can expand */
+        width: 100% !important; /* Fixed width for all options */
+        display: flex !important;
+        align-items: flex-start !important;
+        padding: 1rem !important; /* Better internal spacing */
+        box-sizing: border-box !important;
+        line-height: 1.4 !important; /* Better text spacing */
+    }
+
+    .option-button:hover {
+        border-color: #9ca3af;
+        background-color: #f9fafb;
+    }
+
+    .radio-button:checked + .option-button {
+        border: 2px solid var(--military-green);
+        background-color: #dcfce7;
+    }
+
+    :root {
+        --military-green: #166534;
+    }
+</style>
+
+<script>
+    const questions = [
+        {
+            question: "Qual é o principal motivo pelo qual você deseja obter o registro de CAC?",
+            options: [
+                "Coleção de armas históricas ou de valor simbólico",
+                "Prática de tiro esportivo",
+                "Caça regulamentada",
+                "Defesa pessoal e patrimonial"
+            ]
+        },
+        {
+            question: "Você já possui experiência prévia com armas de fogo?",
+            options: [
+                "Nenhuma experiência",
+                "Experiência básica (ex: curso de tiro)",
+                "Experiência militar ou policial",
+                "Experiência avançada (ex: competições de tiro)"
+            ]
+        },
+        {
+            question: "Com que frequência você pretende praticar tiro esportivo?",
+            options: [
+                "Raramente (menos de uma vez por mês)",
+                "Mensalmente",
+                "Quinzenalmente",
+                "Semanalmente ou mais"
+            ]
+        },
+        {
+            question: "Você tem conhecimento das leis e regulamentações sobre posse e porte de armas no Brasil?",
+            options: [
+                "Nenhum conhecimento",
+                "Conhecimento básico",
+                "Conhecimento intermediário",
+                "Conhecimento avançado"
+            ]
+        },
+        {
+            question: "Qual é o seu nível de comprometimento com a segurança no manuseio e armazenamento de armas?",
+            options: [
+                "Baixo, ainda preciso aprender muito",
+                "Médio, tenho noções básicas de segurança",
+                "Alto, sou muito cuidadoso e consciente",
+                "Muito alto, sou um exemplo em segurança"
+            ]
+        },
+        {
+            question: "Quais são os quatro princípios fundamentais de segurança no manuseio de armas?",
+            options: [
+                "Manter o dedo fora do gatilho, tratar toda arma como se estivesse carregada, identificar o alvo e o que está além dele, manter a arma apontada para direção segura",
+                "Limpar a arma regularmente, usar proteção auditiva, manter munição separada, praticar tiro regularmente",
+                "Registrar a arma, guardar em local seguro, ter porte atualizado, fazer curso de tiro",
+                "Usar coldre adequado, manter documentação em dia, treinar regularmente, conhecer legislação"
+            ]
+        },
+        {
+            question: "Em relação ao armazenamento de armas de fogo em casa, qual a conduta mais adequada?",
+            options: [
+                "Manter em cofre específico, desmuniciada e com travas de segurança",
+                "Guardar em local alto, fora do alcance de crianças",
+                "Manter carregada para pronto uso em caso de emergência",
+                "Esconder em local secreto da casa"
+            ]
+        },
+        {
+            question: "Qual o procedimento correto ao transportar uma arma de fogo para o clube de tiro?",
+            options: [
+                "Desmuniciada, em case apropriado, com documentação e guia de tráfego",
+                "Em coldre, carregada mas travada",
+                "Desmontada no porta-malas do carro",
+                "Escondida para evitar chamar atenção"
+            ]
+        },
+        {
+            question: "Como você deve proceder em caso de falha de disparo (munição que não detonou)?",
+            options: [
+                "Manter a arma apontada para direção segura por 30 segundos e seguir procedimento de descarregamento",
+                "Tentar disparar novamente imediatamente",
+                "Desmontar a arma para verificar o problema",
+                "Remover a munição manualmente com força"
+            ]
+        },
+        {
+            question: "Qual a importância do calibre na escolha de uma arma de fogo?",
+            options: [
+                "Define a potência, recuo, custo e disponibilidade de munição",
+                "Apenas determina o tamanho do projétil",
+                "Só importa para competições oficiais",
+                "É relevante apenas para colecionadores"
+            ]
+        }
+    ];
+
+    let currentQuestion = 0;
+    const questionContainer = document.getElementById('question-container');
+    const prevButton = document.getElementById('prev-button');
+    const nextButton = document.getElementById('next-button');
+
+    async function displayQuestion(index) {
+        questionContainer.classList.remove('opacity-100');
+        questionContainer.classList.add('opacity-0');
+
+        await new Promise(resolve => setTimeout(resolve, 300));
+
+        const question = questions[index];
+        let html = `
+            <div class="question-wrapper">
+                <h2 class="text-lg font-semibold text-military-dark">${index + 1}. ${question.question}</h2>
+                <div>
+        `;
+        question.options.forEach((option, i) => {
+            html += `
+                <div class="flex items-center p-1">
+                    <input type="radio" id="q${index}_option${i}" name="q${index}" value="${option}" class="radio-button hidden">
+                    <label for="q${index}_option${i}" class="option-button flex items-center w-full cursor-pointer text-base p-2">
+                        <div class="checkbox-custom"></div>
+                        <span class="flex-grow">${option}</span>
+                    </label>
+                </div>
+            `;
+        });
+        html += '</div></div>';
+        questionContainer.innerHTML = html;
+
+        await new Promise(resolve => setTimeout(resolve, 100));
+        questionContainer.classList.remove('opacity-0');
+        questionContainer.classList.add('opacity-100');
+    }
+
+    function updateButtons() {
+        prevButton.style.display = currentQuestion > 0 ? 'block' : 'none';
+        nextButton.innerHTML = currentQuestion === questions.length - 1 ? 
+            '<i class="fa fa-check mr-2"></i>Finalizar' : 
+            '<i class="fa fa-arrow-right mr-2"></i>Próxima';
+    }
+
+    prevButton.addEventListener('click', () => {
+        if (currentQuestion > 0) {
+            currentQuestion--;
+            displayQuestion(currentQuestion);
+            updateButtons();
+        }
+    });
+
+    nextButton.addEventListener('click', () => {
+        const selectedOption = document.querySelector(`input[name="q${currentQuestion}"]:checked`);
+        if (selectedOption) {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                displayQuestion(currentQuestion);
+                updateButtons();
+            } else {
+                const formData = new FormData();
+                questions.forEach((_, index) => {
+                    const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                    if (selected) {
+                        formData.append(`question_${index}`, selected.value);
+                    }
+                });
+
+                fetch('/submit_exam', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = data.redirect || '/';
+                    } else {
+                        alert('Erro ao enviar questionário: ' + (data.error || 'Erro desconhecido'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Erro ao enviar questionário. Tente novamente.');
+                });
+            }
+        } else {
+            alert('Por favor, selecione uma opção antes de prosseguir.');
+        }
+    });
+
+    displayQuestion(currentQuestion);
+    updateButtons();
+</script>
+{% endblock %}

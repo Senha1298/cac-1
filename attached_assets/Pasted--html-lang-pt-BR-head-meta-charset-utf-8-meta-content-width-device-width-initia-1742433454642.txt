@@ -1,0 +1,114 @@
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Certificado de Registro CAC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+        @media (min-width: 640px) {
+            html {
+                font-size: 100%;
+            }
+            body {
+                width: 375px;
+                margin: 0 auto;
+            }
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .blink {
+            animation: blink 1s infinite;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 m-0">
+    <div class="relative w-full h-[650px] p-6 bg-no-repeat bg-contain bg-top" style="background-image: url('https://i.ibb.co/Mkfs9J4s/Design-sem-nome-3-1.png');">
+        <!-- Background watermark -->
+        <div class="absolute inset-0 flex justify-center items-center opacity-10" style="top: -40%;">
+            <img src="https://www.gov.br/planalto/pt-br/conheca-a-presidencia/acervo/simbolos-nacionais/brasao-da-republica/brasaooficialpretoebranco.png.png" alt="Brasão da República Federativa do Brasil" class="w-auto h-[800px] object-contain">
+        </div>
+        <!-- Content -->
+        <div class="relative z-10 text-center">
+            <p class="text-gray-700 font-medium text-[10px]">MINISTÉRIO DA DEFESA</p>
+            <p class="text-gray-800 font-semibold text-xs mt-1">EXÉRCITO BRASILEIRO</p>
+            <p class="text-gray-900 font-bold text-sm mt-1">CERTIFICADO DE REGISTRO CAC</p>
+        </div>
+        <div class="relative z-10 mt-4 flex justify-between text-[10px]">
+            <p class="text-gray-700">
+                <span class="font-medium">Nº CR:</span> 658493747
+            </p>
+            <p class="text-gray-700">
+                <span class="font-medium">Validade:</span> 23/06/2031
+            </p>
+        </div>
+        <div class="relative z-10 mt-3 border border-gray-300 p-2 h-12">
+            <p class="text-gray-600 text-[8px]">NOME COMPLETO</p>
+            <p class="text-gray-800 font-medium text-xs mt-1 uppercase">JOÃO SILVA SANTOS</p>
+        </div>
+        <div class="relative z-10 mt-3 grid grid-cols-2 gap-4">
+            <div class="border border-gray-300 p-2 h-12">
+                <p class="text-gray-600 text-[8px]">CPF</p>
+                <p class="text-gray-800 text-xs mt-1 font-bold">123.456.789-00</p>
+            </div>
+            <div class="border border-gray-300 p-2 h-12">
+                <p class="text-gray-600 text-[8px]">SFPC DE VINCULAÇÃO (RM)</p>
+                <p class="text-gray-800 text-[10px] font-medium mt-1">5ª RM/5ª DE</p>
+            </div>
+        </div>
+        <div class="relative z-10 mt-3 border border-gray-300 p-2">
+            <p class="text-gray-600 text-[8px] font-medium mb-1">DESCRIÇÃO DO MATERIAL LIBERADO PARA COMPRA</p>
+            <div class="grid grid-cols-3 gap-2 text-[7px]">
+                <div class="border border-gray-300 p-2">
+                    <p class="font-medium whitespace-nowrap">1. Pistola Taurus G3C</p>
+                    <p class="text-gray-600">2 un. / 600 mun./ano</p>
+                </div>
+                <div class="border border-gray-300 p-2">
+                    <p class="font-medium whitespace-nowrap">2. Revólver Taurus 856</p>
+                    <p class="text-gray-600">1 un. / 300 mun./ano</p>
+                </div>
+                <div class="border border-gray-300 p-2">
+                    <p class="font-medium whitespace-nowrap">3. Pistola Glock G19</p>
+                    <p class="text-gray-600">1 un. / 500 mun./ano</p>
+                </div>
+                <div class="border border-gray-300 p-2">
+                    <p class="font-medium whitespace-nowrap">4. Carabina CBC 8122</p>
+                    <p class="text-gray-600">1 un. / 300 mun./ano</p>
+                </div>
+                <div class="border border-gray-300 p-2">
+                    <p class="font-medium whitespace-nowrap">5. Espingarda Pump CBC</p>
+                    <p class="text-gray-600">1 un. / 150 mun./ano</p>
+                </div>
+                <div class="border border-gray-300 p-2">
+                    <p class="font-medium whitespace-nowrap">6. Pistola Bersa TPR9C</p>
+                    <p class="text-gray-600">1 un. / 400 mun./ano</p>
+                </div>
+            </div>
+        </div>
+        <div class="relative z-10 mt-3">
+            <p class="text-gray-700 text-[10px] leading-tight">
+                <span class="font-medium">AMPARO LEGAL:</span> De acordo com a Lei 10.826, de 22 Dez 2003 e Decreto 9.846, de 25 Jun 2019. Este registro permite apenas o armazenamento da arma na residência e o transporte até o clube de tiro ou local de caça autorizado.
+            </p>
+        </div>
+        <div class="relative z-10 mt-4 flex justify-between items-start">
+            <img alt="QR Code representando a autenticação do documento" class="w-28 h-28" src="https://i.ibb.co/MxD6K1Pd/Design-sem-nome-4.png">
+            <div class="text-left ml-4">
+                <p class="text-gray-700 font-medium text-xs">ATIVIDADES AUTORIZADAS</p>
+                <p class="text-gray-600 text-[8px] mt-1">Colecionamento - Tiro Desportivo</p>
+                <div class="flex items-center mt-2">
+                    <i class="fas fa-exclamation-triangle text-red-500 text-lg mr-2 blink"></i>
+                    <p class="text-red-500 text-[8px] font-bold">ALERTA: Este documento não está válido</p>
+                </div>
+                <p class="text-red-500 text-[8px] font-bold mt-2">Existem pendências a serem resolvidas urgentemente</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

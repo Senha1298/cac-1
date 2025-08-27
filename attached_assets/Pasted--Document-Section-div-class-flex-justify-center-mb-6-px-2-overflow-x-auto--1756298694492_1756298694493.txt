@@ -1,0 +1,58 @@
+    <!-- Document Section -->
+    <div class="flex justify-center mb-6 px-2 overflow-x-auto">
+        <div class="cr-outer">
+            <img 
+                src="https://i.ibb.co/Mkfs9J4s/Design-sem-nome-3-1.png" 
+                alt="Borda oficial de documento brasileiro, sem fundo, com detalhes dourados e arabescos, deitada na horizontal" 
+                class="cr-border-img"
+                draggable="false"
+            >
+            <div class="cr-content">
+                <img alt="Brasão da República Federativa do Brasil, colorido, com estrela azul, folhas verdes, faixa amarela e azul, fundo transparente" class="cr-emblem" draggable="false" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-d2hgBOBbojBokAIYajmOPio84hI2O_6M_Q&s" width="220" height="220">
+                <div>
+                    <div class="text-center">
+                        <div style="font-size: 8px; font-weight: normal; line-height: 1.2; color: black; letter-spacing: 0.01em; margin-bottom: 0.5px; font-family: 'Roboto', Arial, sans-serif;">REPÚBLICA FEDERATIVA DO BRASIL</div>
+                        <div style="font-size: 8px; font-weight: normal; line-height: 1.2; color: black; letter-spacing: 0.01em; margin-bottom: 0.5px; font-family: 'Roboto', Arial, sans-serif;">MINISTÉRIO DA DEFESA</div>
+                        <div style="font-size: 8px; font-weight: normal; line-height: 1.2; color: black; letter-spacing: 0.01em; margin-bottom: 0.5px; font-family: 'Roboto', Arial, sans-serif;">EXÉRCITO BRASILEIRO</div>
+                        <div class="mt-1 text-[14px] font-bold leading-tight text-black tracking-tight">CERTIFICADO DE REGISTRO</div>
+                    </div>
+                    <div class="flex justify-between mt-2" style="font-size: 8px; font-family: 'Roboto', Arial, sans-serif;">
+                        <div class="flex items-center">
+                            <span class="cr-label">Nº CR</span>
+                            <span class="cr-value" id="cr-number" style="margin-left: 4px;">000.000.000-00</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="cr-label">VALIDADE</span>
+                            <span class="cr-value" id="cr-validade" style="margin-left: 4px;">00/00/0000</span>
+                        </div>
+                    </div>
+                    <div class="cr-field-group cr-nome" style="margin-top:6px;">
+                        <span class="cr-label-float">NOME COMPLETO</span>
+                        <div class="cr-field" style="background:transparent;">
+                            <span class="cr-value uppercase font-bold" id="text-overlay-name">FULANO DE TAL</span>
+                        </div>
+                    </div>
+                    <div class="cr-row" style="margin-top:6px;">
+                        <div class="cr-field-group cr-cpf">
+                            <span class="cr-label-float">CPF</span>
+                            <div class="cr-field" style="background:transparent;">
+                                <span class="cr-value font-bold" id="text-overlay-cpf">000.000.000-00</span>
+                            </div>
+                        </div>
+                        <div class="cr-field-group cr-sfpc">
+                            <span class="cr-label-float">SFPC DE VINCULAÇÃO (RM)</span>
+                            <div class="cr-field" style="background:transparent;">
+                                <span class="cr-value">Cmdo 0ª RM</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cr-field-group cr-amparo" style="margin-top:6px;">
+                        <span class="cr-label-float">AMPARO LEGAL</span>
+                        <div class="cr-field" style="background:transparent;">
+                            <span class="cr-amp">De acordo com a Lei 10.826, de 22 Dez 2003 e Decreto 9.846, de 25 Jun 2019</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

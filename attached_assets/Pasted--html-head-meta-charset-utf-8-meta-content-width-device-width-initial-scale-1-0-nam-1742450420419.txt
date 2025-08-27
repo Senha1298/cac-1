@@ -1,0 +1,144 @@
+<html>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Aprovação de Registro CAC
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+  <style>
+   body {
+            font-family: 'Inter', sans-serif;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .button-3d {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+            transition: all 0.15s ease;
+        }
+        .button-3d:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+        }
+        .button-3d:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+        .text-shadow {
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+  </style>
+ </head>
+ <body class="flex items-center justify-center min-h-screen bg-gray-900 bg-opacity-75">
+  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
+   <div class="bg-white w-[95%] max-w-2xl rounded-md shadow-2xl overflow-hidden" style="border-radius: 4px;">
+    <div class="flex justify-center py-4">
+     <img alt="Logo do Ministério da Defesa com design oficial e cores institucionais" class="h-16" src="https://i.ibb.co/35Qc3qCb/ministerio-da-defesa-1-1.jpg"/>
+    </div>
+    <div class="p-4">
+     <div class="text-left text-sm mb-4">
+      <ul class="list-disc pl-5 space-y-1">
+       <li>
+        Efetue o pagamento da Taxa de Inscrição em até
+        <span class="font-bold text-red-600">
+         10 minutos
+        </span>
+        .
+       </li>
+       <li>
+        Após, marque o exame de tiro na base militar.
+       </li>
+      </ul>
+     </div>
+     <div class="bg-[#126736] p-3 mb-4 text-xs text-white" style="border-radius: 4px;">
+      <p class="font-semibold mb-1">
+       <i class="fas fa-info-circle mr-1">
+       </i>
+       Base Militar Localizada:
+      </p>
+      <p>
+       Uma base militar para realizar o teste de tiro foi localizada a
+       <span class="font-bold">
+        12,4 km
+       </span>
+       de distância.
+      </p>
+      <p class="mt-1">
+       Após o exame de tiro, seu CAC será liberado em até
+       <span class="font-bold">
+        48 horas
+       </span>
+       para compras de armamento.
+      </p>
+     </div>
+     <div class="bg-yellow-50 border-l-4 border-yellow-400 p-3 mb-4 text-xs" style="border-radius: 4px;">
+      <p class="font-semibold mb-1">
+       <i class="fas fa-exclamation-triangle text-yellow-600 mr-1">
+       </i>
+       Aviso Importante:
+      </p>
+      <p>
+       Caso o pagamento não seja efetuado dentro do prazo estipulado:
+      </p>
+      <ul class="list-disc pl-4 mt-1">
+       <li>
+        O requerente ficará impedido de se inscrever no Registro de novos CAC's pelo período de 2 (dois) anos.
+       </li>
+       <li>
+        O valor da Taxa de Inscrição será automaticamente inscrito na Dívida Ativa da União, vinculada ao CPF do requerente.
+       </li>
+       <li>
+        Poderão incidir juros e multas sobre o valor devido, conforme legislação vigente.
+       </li>
+      </ul>
+     </div>
+     <div class="text-center">
+      <button class="bg-[#126736] hover:bg-green-700 text-white font-bold py-3 px-8 rounded-md text-sm transition duration-300 button-3d text-shadow w-full sm:w-auto">
+       PAGAR TAXA DE INSCRIÇÃO
+      </button>
+     </div>
+    </div>
+    <div class="bg-gray-100 px-4 py-2 flex items-center justify-between text-xs">
+     <div class="flex items-center">
+      <img alt="Logo Ministério da Defesa" class="h-6" height="30" src="https://cdn.oantagonista.com/uploads/2024/03/logo_ministeriodadefesa-1.png" width="60"/>
+      <div class="ml-2 border-l border-gray-300 pl-2">
+       <p class="text-gray-500">
+        SISG - Ministério da Defesa
+       </p>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+   function startCountdown() {
+            let minutes = 10;
+            let seconds = 0;
+            const countdownEl = document.getElementById('countdown');
+            const interval = setInterval(() => {
+                if (seconds === 0) {
+                    if (minutes === 0) {
+                        clearInterval(interval);
+                        countdownEl.classList.add('text-red-800');
+                        return;
+                    }
+                    minutes--;
+                    seconds = 59;
+                } else {
+                    seconds--;
+                }
+                const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+                const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+                countdownEl.textContent = `${formattedMinutes}:${formattedSeconds}`;
+                if (minutes === 0 && seconds <= 30) {
+                    countdownEl.classList.add('animate-pulse');
+                }
+            }, 1000);
+        }
+        document.addEventListener('DOMContentLoaded', startCountdown);
+  </script>
+ </body>
+</html>

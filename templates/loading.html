@@ -1,0 +1,166 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<style>
+    body {
+        overflow: hidden;
+    }
+
+    .loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #0D3B1A;
+        opacity: 1;
+        transition: opacity 0.3s ease;
+    }
+
+    .loading-dots {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .loading-dots span {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        background-color: #FFCC00;
+        border-radius: 50%;
+        animation: pulse 1s infinite ease-in-out;
+    }
+
+    .loading-dots span:nth-child(1) { animation-delay: 0s; }
+    .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes pulse {
+        0%, 100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        50% {
+            transform: scale(1.2);
+            opacity: 0.5;
+        }
+    }
+</style>
+
+<div id="loadingScreen" class="loading-screen">
+    <!-- Brasão -->
+    <div style="margin-bottom: 12px;">
+        <img src="https://www.gov.br/planalto/pt-br/conheca-a-presidencia/biblioteca-da-pr/simbolos-nacionais/brasao-da-republica/brasaooficialcolorido.png" alt="Brasão da República Federativa do Brasil" style="width: 150px; height: 150px; object-fit: contain;">
+    </div>
+
+    <!-- Texto do Exército -->
+    <div class="text-white text-lg font-bold mb-2 text-center">EXÉRCITO BRASILEIRO</div>
+    <div class="text-white text-sm mb-8 text-center">BRAÇO FORTE, MÃO AMIGA</div>
+
+    <!-- Status text -->
+    <div id="loadingStatus" class="text-white text-lg mb-8 text-center">
+        {{ loading_text }}
+    </div>
+
+    <!-- Bolinhas de carregamento -->
+    <div class="loading-dots">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const loadingScreen = document.getElementById('loadingScreen');
+        const nextPage = "{{ next_page }}";
+        const minLoadingTime = {{ loading_time }};
+
+        // Pré-carrega a próxima página e todos seus recursos
+        function preloadNextPage() {
+            return new Promise((resolve) => {
+                fetch(nextPage)
+                    .then(response => response.text())
+                    .then(html => {
+                        const tempDiv = document.createElement('div');
+                        tempDiv.style.display = 'none';
+                        tempDiv.innerHTML = html;
+                        document.body.appendChild(tempDiv);
+
+                        // Pré-carrega imagens
+                        const images = tempDiv.getElementsByTagName('img');
+                        const imagePromises = Array.from(images).map(img => {
+                            return new Promise((resolveImg) => {
+                                if (img.complete) {
+                                    resolveImg();
+                                } else {
+                                    img.onload = resolveImg;
+                                    img.onerror = resolveImg;
+                                }
+                            });
+                        });
+
+                        // Pré-carrega scripts
+                        const scripts = tempDiv.getElementsByTagName('script');
+                        const scriptPromises = Array.from(scripts).map(script => {
+                            if (!script.src) return Promise.resolve();
+                            return new Promise((resolveScript) => {
+                                const newScript = document.createElement('script');
+                                newScript.src = script.src;
+                                newScript.onload = resolveScript;
+                                newScript.onerror = resolveScript;
+                                document.head.appendChild(newScript);
+                            });
+                        });
+
+                        // Pré-carrega estilos
+                        const styles = tempDiv.getElementsByTagName('link');
+                        const stylePromises = Array.from(styles).map(style => {
+                            if (style.rel !== 'stylesheet') return Promise.resolve();
+                            return new Promise((resolveStyle) => {
+                                const newStyle = document.createElement('link');
+                                newStyle.rel = 'stylesheet';
+                                newStyle.href = style.href;
+                                newStyle.onload = resolveStyle;
+                                newStyle.onerror = resolveStyle;
+                                document.head.appendChild(newStyle);
+                            });
+                        });
+
+                        // Aguarda todos os recursos carregarem
+                        Promise.all([
+                            ...imagePromises,
+                            ...scriptPromises,
+                            ...stylePromises
+                        ]).then(() => {
+                            document.body.removeChild(tempDiv);
+                            resolve();
+                        });
+                    })
+                    .catch(() => resolve()); // Em caso de erro, continua normalmente
+            });
+        }
+
+        // Inicia o pré-carregamento imediatamente
+        const preloadPromise = preloadNextPage();
+
+        // Espera tanto o tempo mínimo quanto o pré-carregamento completo
+        Promise.all([
+            new Promise(resolve => setTimeout(resolve, minLoadingTime)),
+            preloadPromise
+        ]).then(() => {
+            loadingScreen.style.opacity = '0';
+            setTimeout(() => {
+                window.location.href = nextPage;
+            }, 300);
+        });
+    });
+</script>
+{% endblock %}

