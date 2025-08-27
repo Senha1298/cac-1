@@ -144,6 +144,43 @@ body {
   box-shadow: 0 0 0 3px rgba(45, 90, 39, 0.1);
 }
 
+/* Override browser default focus styles for all input types and select */
+input[type="text"]:focus,
+input[type="tel"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="url"]:focus,
+textarea:focus,
+select:focus {
+  outline: none !important;
+  border-color: var(--military-green) !important;
+  box-shadow: 0 0 0 3px rgba(45, 90, 39, 0.1) !important;
+}
+
+/* Special styles for date input and select - keep text color black as requested */
+input[type="date"]:focus,
+select:focus {
+  outline: none !important;
+  border-color: var(--military-green) !important;
+  box-shadow: 0 0 0 3px rgba(45, 90, 39, 0.1) !important;
+  color: #000000 !important;
+}
+
+/* Ensure date input and select text remains black even when not focused */
+input[type="date"],
+select {
+  color: #000000 !important;
+}
+
+/* Remove blue outline from all form elements */
+input:focus,
+textarea:focus,
+select:focus,
+button:focus {
+  outline: none !important;
+}
+
 .btn {
   display: inline-block;
   padding: 0.75rem 1.5rem;
