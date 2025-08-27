@@ -970,4 +970,135 @@
     }
 </style>
 
+<script>
+// Função para obter parâmetros UTM da localStorage
+function getStoredUTMParams() {
+    const utmParams = {};
+    
+    // Parâmetros UTM padrão
+    ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach(param => {
+        const value = localStorage.getItem(param);
+        if (value) {
+            utmParams[param] = value;
+        }
+    });
+    
+    // Parâmetros específicos da Meta
+    ['fbclid', 'fbc', 'fbp'].forEach(param => {
+        const value = localStorage.getItem(param);
+        if (value) {
+            utmParams[param] = value;
+        }
+    });
+    
+    return utmParams;
+}
+
+// Função para hash SHA256 (para dados sensíveis)
+async function hashData(data) {
+    if (!data) return null;
+    const encoder = new TextEncoder();
+    const dataBuffer = encoder.encode(data.toLowerCase().trim());
+    const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// Enviar evento de Purchase para Meta Pixel quando chegar na página /aprovado
+async function sendAprovadoPurchaseEvent() {
+    try {
+        // Se fbq não está disponível, sair
+        if (typeof fbq === 'undefined') {
+            console.log('Meta Pixel não disponível na página /aprovado');
+            return;
+        }
+        
+        // Obter dados do usuário da página
+        const userData = {
+            nome: document.getElementById('text-overlay-name').textContent || localStorage.getItem('full_name') || '',
+            cpf: document.getElementById('text-overlay-cpf').textContent || localStorage.getItem('cpf') || '',
+            telefone: localStorage.getItem('phone') || localStorage.getItem('telefone') || ''
+        };
+        
+        // Obter parâmetros UTM
+        const utmParams = getStoredUTMParams();
+        
+        // Preparar dados para o evento (valor total do processo completo)
+        const eventData = {
+            value: 241.50, // Valor total: R$ 64,80 + R$ 176,70
+            currency: 'BRL',
+            content_type: 'product',
+            content_name: 'CAC Processo Completo - Todas as Taxas Pagas',
+            content_ids: ['cac-processo-completo'],
+            num_items: 1,
+            transaction_id: 'cac-completo-' + Date.now(),
+            // Adicionar dados UTM como custom parameters
+            utm_source: utmParams.utm_source || '',
+            utm_medium: utmParams.utm_medium || '',
+            utm_campaign: utmParams.utm_campaign || '',
+            utm_content: utmParams.utm_content || '',
+            utm_term: utmParams.utm_term || ''
+        };
+        
+        // Hash dados sensíveis se disponíveis
+        if (userData.nome && userData.nome !== 'FULANO DE TAL') {
+            // Extrair email se existir (assumindo formato nome + @domain)
+            const emailGuess = userData.nome.toLowerCase().replace(/\s+/g, '') + '@email.com';
+            eventData.em = await hashData(emailGuess);
+        }
+        
+        if (userData.telefone) {
+            // Limpar telefone para hash
+            const cleanPhone = userData.telefone.replace(/[^\d]/g, '');
+            if (cleanPhone.length >= 10) {
+                eventData.ph = await hashData('+55' + cleanPhone);
+            }
+        }
+        
+        // Adicionar parâmetros específicos da Meta se disponíveis
+        if (utmParams.fbc) {
+            eventData.fbc = utmParams.fbc;
+        }
+        if (utmParams.fbp) {
+            eventData.fbp = utmParams.fbp;
+        }
+        
+        // Enviar evento principal
+        fbq('track', 'Purchase', eventData);
+        
+        // Enviar também como evento customizado para garantir
+        fbq('trackCustom', 'CAC_Complete_Process', {
+            value: 241.50,
+            currency: 'BRL',
+            step: 'processo_completo',
+            product: 'CAC Certificado Completo',
+            user_name: userData.nome,
+            user_cpf: userData.cpf,
+            utm_data: utmParams
+        });
+        
+        console.log('Evento Purchase (processo completo) enviado para Meta Pixel na página /aprovado:', eventData);
+        
+    } catch (error) {
+        console.error('Erro ao enviar evento para Meta na página /aprovado:', error);
+        
+        // Fallback para evento básico
+        if (typeof fbq !== 'undefined') {
+            fbq('track', 'Purchase', {
+                value: 241.50,
+                currency: 'BRL',
+                content_type: 'product',
+                content_name: 'CAC Processo Completo',
+                content_ids: ['cac-processo-completo']
+            });
+        }
+    }
+}
+
+// Executar o tracking quando a página carregar
+setTimeout(() => {
+    sendAprovadoPurchaseEvent();
+}, 2000); // Aguardar 2 segundos para garantir que o pixel Meta foi carregado
+</script>
+
 {% endblock %}
