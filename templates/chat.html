@@ -402,16 +402,16 @@ const chatSequence = [
     },
     {
         message: `O CR (Certificado de Registro) é o documento que autoriza você a comprar armas de fogo, transportá-las por todo território brasileiro e manter essas armas em sua residência de maneira 100% legal.`,
-        delay: 10000
+        delay: 12000
     },
     {
         message: '',
-        delay: 8000,
+        delay: 10000,
         showImage: 'https://shotgunclube.com.br/wp-content/uploads/2022/10/CR.png'
     },
     {
         message: `Agora que você já sabe o que é o CR, podemos prosseguir com o processo?`,
-        delay: 9000,
+        delay: 10000,
         showOptions: 'proceedOptions'
     }
 ];
@@ -558,7 +558,7 @@ function handleOptionClick(button, responseText, nextAction) {
 
 
             await showTyping(5000);
-            addMessage('O pagamento da taxa tem validade de apenas 15 minutos. Assim que realizar vamos finalizar seu Cadastro.', true, true);
+            addMessage('O pagamento da taxa tem validade de apenas 15 minutos. Clique no botão abaixo para seu finalizar seu Cadastro.', true, true);
 
             // Show payment button
             setTimeout(() => {
