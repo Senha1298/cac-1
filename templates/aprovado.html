@@ -1170,11 +1170,14 @@ function cleanupOldPurchaseFlags() {
     }
 }
 
-// Executar limpeza e tracking quando a página carregar
+// PURCHASE REMOVIDO: Agora só enviamos Purchase quando a API Recoveryfy retornar "approved"
+// Purchase será enviado apenas nas páginas de pagamento quando status === 'approved'
+// A página /aprovado não envia mais Purchase automaticamente
+
 setTimeout(() => {
-    cleanupOldPurchaseFlags(); // Limpar flags antigas primeiro
-    sendAprovadoPurchaseEvent(); // Depois tentar enviar Purchase
-}, 2000); // Aguardar 2 segundos para garantir que o pixel Meta foi carregado
+    cleanupOldPurchaseFlags(); // Limpar apenas flags antigas
+    console.log('Página /aprovado carregada - Purchase será enviado apenas via aprovação de pagamento');
+}, 2000);
 </script>
 
 {% endblock %}

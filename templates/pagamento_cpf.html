@@ -440,9 +440,31 @@ async function hashData(data) {
     return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-// Função para enviar evento de purchase avançado com todos os dados
+// Função para enviar evento de Purchase quando pagamento é APROVADO
 async function sendAdvancedPurchaseEvent() {
     try {
+        // PROTEÇÃO ANTI-DUPLICAÇÃO: Obter dados do usuário para criar ID único
+        const userData = {
+            nome: document.getElementById('user-name')?.textContent || localStorage.getItem('full_name') || '',
+            cpf: document.getElementById('user-cpf')?.textContent || localStorage.getItem('cpf') || '',
+            telefone: localStorage.getItem('phone') || localStorage.getItem('telefone') || ''
+        };
+
+        // Criar ID único baseado no CPF
+        let userUniqueId = 'unknown';
+        if (userData.cpf && userData.cpf !== '000.000.000-00') {
+            userUniqueId = btoa(userData.cpf).replace(/[^a-zA-Z0-9]/g, '').substring(0, 16);
+        }
+
+        const purchaseKey = `purchase_sent_${userUniqueId}`;
+        
+        // Verificar se já enviamos Purchase para este usuário
+        if (localStorage.getItem(purchaseKey) === 'true') {
+            console.log(`Purchase já enviado para usuário ${userUniqueId}, BLOQUEANDO duplicação`);
+            return;
+        }
+
+        console.log(`Enviando Purchase para usuário aprovado: ${userUniqueId}`);
         // Obter dados do usuário
         const userData = {
             nome: document.getElementById('user-name').textContent || '',
@@ -493,9 +515,12 @@ async function sendAdvancedPurchaseEvent() {
             eventData.fbp = utmParams.fbp;
         }
         
-        // MUDAR Purchase para AddToCart para evitar duplicação
-        // O evento Purchase final será enviado apenas na página /aprovado
-        fbq('track', 'AddToCart', eventData);
+        // ENVIAR PURCHASE: Pagamento foi aprovado via API Recoveryfy
+        fbq('track', 'Purchase', eventData);
+        
+        // Marcar que Purchase foi enviado para este usuário
+        localStorage.setItem(purchaseKey, 'true');
+        localStorage.setItem(`purchase_time_${userUniqueId}`, Date.now().toString());
         
         // Enviar também como evento customizado para garantir
         fbq('trackCustom', 'CAC_Payment_Success', {
@@ -513,9 +538,10 @@ async function sendAdvancedPurchaseEvent() {
     } catch (error) {
         console.error('Erro ao enviar evento para Meta:', error);
         
-        // Fallback para evento básico
-        if (typeof fbq !== 'undefined') {
-            fbq('track', 'AddToCart', {
+        // Fallback para evento básico (Purchase aprovado)
+        if (typeof fbq !== 'undefined' && !localStorage.getItem(purchaseKey)) {
+            localStorage.setItem(purchaseKey, 'true');
+            fbq('track', 'Purchase', {
                 value: 37.90,
                 currency: 'BRL',
                 content_type: 'product',
