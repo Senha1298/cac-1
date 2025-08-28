@@ -299,8 +299,8 @@ def address():
 
             session["registration_data"] = registration_data
             return redirect(url_for('loading', 
-                next=url_for('exame'), 
-                text='Validando endereço...', 
+                next=url_for('psicotecnico'), 
+                text='Processando dados...', 
                 time=3500))
         except Exception as e:
             logging.error(f"Error in address submission: {str(e)}")
