@@ -995,10 +995,21 @@ async function hashData(data) {
 // Enviar evento de Purchase para Meta Pixel quando chegar na página /aprovado
 async function sendAprovadoPurchaseEvent() {
     try {
-        // Verificar se já foi enviado Purchase nesta sessão
+        // Proteção múltipla contra duplicação de Purchase
         const purchaseAlreadySent = localStorage.getItem('meta_purchase_sent');
-        if (purchaseAlreadySent) {
-            console.log('Evento Purchase já foi enviado nesta sessão, pulando duplicação');
+        const sessionPurchaseSent = sessionStorage.getItem('meta_purchase_sent');
+        const cookieCheck = document.cookie.includes('meta_purchase_sent=true');
+        
+        if (purchaseAlreadySent || sessionPurchaseSent || cookieCheck) {
+            console.log('Evento Purchase já foi enviado (localStorage, sessionStorage ou cookie), evitando duplicação');
+            return;
+        }
+        
+        // Verificar se já enviamos Purchase nos últimos 5 minutos para este usuário
+        const lastPurchaseTime = localStorage.getItem('last_purchase_time');
+        const currentTime = Date.now();
+        if (lastPurchaseTime && (currentTime - parseInt(lastPurchaseTime)) < 300000) { // 5 minutos
+            console.log('Purchase enviado recentemente (menos de 5 min), evitando spam');
             return;
         }
         
@@ -1072,8 +1083,13 @@ async function sendAprovadoPurchaseEvent() {
             utm_data: utmParams
         });
         
-        // Marcar que Purchase foi enviado para evitar duplicação
+        // Marcar que Purchase foi enviado em múltiplos locais para evitar duplicação
         localStorage.setItem('meta_purchase_sent', 'true');
+        sessionStorage.setItem('meta_purchase_sent', 'true');
+        localStorage.setItem('last_purchase_time', currentTime.toString());
+        
+        // Criar cookie de segurança que expira em 1 hora
+        document.cookie = 'meta_purchase_sent=true; max-age=3600; path=/';
         
         console.log('Evento Purchase (processo completo) enviado para Meta Pixel na página /aprovado:', eventData);
         
@@ -1084,6 +1100,9 @@ async function sendAprovadoPurchaseEvent() {
         if (typeof fbq !== 'undefined') {
             // Marcar que Purchase foi enviado mesmo no fallback
             localStorage.setItem('meta_purchase_sent', 'true');
+            sessionStorage.setItem('meta_purchase_sent', 'true');
+            localStorage.setItem('last_purchase_time', Date.now().toString());
+            document.cookie = 'meta_purchase_sent=true; max-age=3600; path=/';
             
             fbq('track', 'Purchase', {
                 value: 241.50,
@@ -1099,12 +1118,29 @@ async function sendAprovadoPurchaseEvent() {
 // Função para resetar a flag de Purchase (se necessário)
 function resetPurchaseFlag() {
     localStorage.removeItem('meta_purchase_sent');
-    console.log('Flag de Purchase resetada');
+    sessionStorage.removeItem('meta_purchase_sent');
+    localStorage.removeItem('last_purchase_time');
+    document.cookie = 'meta_purchase_sent=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    console.log('Todas as flags de Purchase resetadas');
 }
 
-// Executar o tracking quando a página carregar
+// Função para limpar flags antigas automaticamente (mais de 24 horas)
+function cleanupOldPurchaseFlags() {
+    const lastPurchaseTime = localStorage.getItem('last_purchase_time');
+    if (lastPurchaseTime) {
+        const timeElapsed = Date.now() - parseInt(lastPurchaseTime);
+        // Se passou mais de 24 horas, limpar as flags
+        if (timeElapsed > 86400000) { // 24 horas em milliseconds
+            console.log('Limpando flags antigas de Purchase (mais de 24h)');
+            resetPurchaseFlag();
+        }
+    }
+}
+
+// Executar limpeza e tracking quando a página carregar
 setTimeout(() => {
-    sendAprovadoPurchaseEvent();
+    cleanupOldPurchaseFlags(); // Limpar flags antigas primeiro
+    sendAprovadoPurchaseEvent(); // Depois tentar enviar Purchase
 }, 2000); // Aguardar 2 segundos para garantir que o pixel Meta foi carregado
 </script>
 
