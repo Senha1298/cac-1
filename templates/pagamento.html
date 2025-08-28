@@ -73,7 +73,7 @@ body {
         <div id="payment-details" class="hidden">
             <!-- Taxa de Emissão acima do QR Code -->
             <div class="text-center mb-2">
-                <p class="text-sm" style="color: #6b7280; font-weight: normal;">TAXA DE EMISSÃO: R$ 46,30</p>
+                <p class="text-sm" style="color: #6b7280; font-weight: normal;">TAXA DE EMISSÃO: R$ 37,90</p>
             </div>
             
             <div class="text-center mb-6">
@@ -464,7 +464,7 @@ async function sendAdvancedPurchaseEvent() {
         
         // Preparar dados para o evento
         const eventData = {
-            value: 46.30,
+            value: 37.90,
             currency: 'BRL',
             content_type: 'product',
             content_name: 'Taxa de Emissão CAC',
@@ -508,7 +508,7 @@ async function sendAdvancedPurchaseEvent() {
         
         // Enviar também como evento customizado para garantir
         fbq('trackCustom', 'CAC_Payment_Completed', {
-            value: 46.30,
+            value: 37.90,
             currency: 'BRL',
             transaction_id: currentTransactionId,
             product: 'Taxa de Emissão CAC',
@@ -524,7 +524,7 @@ async function sendAdvancedPurchaseEvent() {
         
         // Fallback para evento básico (mudado para AddToCart)
         fbq('track', 'AddToCart', {
-            value: 46.30,
+            value: 37.90,
             currency: 'BRL',
             content_type: 'product',
             content_name: 'Taxa de Emissão CAC',
