@@ -11,8 +11,8 @@ body {
         <!-- Formulário CAC -->
         <div class="mb-6" style="text-align: left;">
                 <div style="text-align: center; margin-bottom: 16px;">
-                    <i class="fas fa-exclamation-triangle" style="color: #dc2626; font-size: 24px; margin-bottom: 8px;"></i>
-                    <h2 class="text-sm font-bold mb-4" style="color: #dc2626;">TAXAS FEDERAIS PENDENTES</h2>
+                    <i class="fas fa-exclamation-triangle" style="color: #dc2626; font-size: 34px!important; margin-bottom: 4px;"></i>
+                    <h2 class="font-bold mb-4" style="font-size: 18px; color: #dc2626;">TAXAS FEDERAIS PENDENTES</h2>
                 </div>
                 
                 <div style="margin-bottom: 16px;">
@@ -72,7 +72,7 @@ body {
         <!-- QR Code PIX -->
         <div id="payment-details" class="hidden">
             <div class="text-center mb-6">
-                <div id="qr-code-container" class="mb-4 flex justify-center items-center">
+                <div id="qr-code-container" class="mb-4 p-6 bg-gray-50 rounded-lg flex justify-center items-center">
                     <img id="qr-code" src="" alt="QR Code PIX" class="border-2 border-gray-300 rounded bg-white p-2" style="width: 180px; height: 180px;">
                 </div>
                 <p id="qr-status" class="text-sm text-gray-600 mb-4">Gerando QR Code...</p>
@@ -81,30 +81,32 @@ body {
             <!-- Código PIX -->
             <div style="margin-bottom: 24px;">
                 <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px;">Código PIX (Copia e Cola):</label>
-                <textarea id="pix-code" readonly rows="2"
-                       style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 2px; font-size: 14px; background-color: #f9fafb; resize: none; font-family: monospace; height: 50px;" 
+                <textarea id="pix-code" readonly rows="4"
+                       style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 2px; font-size: 14px; background-color: #f9fafb; resize: none; font-family: monospace;" 
                        placeholder="Código será gerado..."></textarea>
                 <div style="text-align: center; margin-top: 12px;">
                     <button onclick="copyPixCode()" 
-                            style="background: linear-gradient(145deg, #059669, #047857); color: white; padding: 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 700; font-size: 18px; transition: all 0.3s; width: 100%; box-shadow: 0 8px 16px rgba(5,150,105,0.3), 0 4px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.2); transform: translateY(-2px); text-shadow: 1px 1px 2px rgba(0,0,0,0.3);"
-                            onmouseover="this.style.background='linear-gradient(145deg, #047857, #065f46)'; this.style.boxShadow='0 12px 24px rgba(5,150,105,0.4), 0 6px 12px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.3)'; this.style.transform='translateY(-3px)';" 
-                            onmouseout="this.style.background='linear-gradient(145deg, #059669, #047857)'; this.style.boxShadow='0 8px 16px rgba(5,150,105,0.3), 0 4px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.2)'; this.style.transform='translateY(-2px)';">
-                        <i class="fas fa-copy" style="margin-right: 10px;"></i>
+                            style="background-color: #059669; color: white; padding: 18px 36px; border-radius: 2px; border: none; cursor: pointer; font-weight: 500; font-size: 18px; transition: all 0.3s;"
+                            onmouseover="this.style.backgroundColor='#047857'" 
+                            onmouseout="this.style.backgroundColor='#059669'">
+                        <i class="fas fa-copy" style="margin-right: 8px;"></i>
                         Copiar Código PIX
                     </button>
                 </div>
             </div>
 
             <!-- Instruções -->
-            <div style="background-color: rgba(32, 108, 79, 0.1); border-left: 4px solid #206C4F; padding: 16px; margin-bottom: 16px; border-radius: 2px;">
+            <div style="background-color: #eff6ff; border-left: 4px solid #60a5fa; padding: 16px; margin-bottom: 16px; border-radius: 2px;">
                 <div style="display: flex; align-items: flex-start;">
                     <div style="flex-shrink: 0; margin-right: 12px; margin-top: 2px;">
-                        <i class="fas fa-check-circle" style="color: #206C4F; font-size: 16px;"></i>
+                        <i class="fas fa-info-circle" style="color: #60a5fa; font-size: 16px;"></i>
                     </div>
                     <div>
-                        <p style="font-size: 14px; color: #206C4F; margin: 0;">
-                            <strong>Próximos Passos:</strong><br>
-                            Após o pagamento das taxas no valor de <strong>R$ 176,70</strong>, seu cadastro CAC será finalizado e você poderá agendar o exame de tiro obrigatório para conclusão do processo.
+                        <p style="font-size: 14px; color: #1d4ed8; margin: 0;">
+                            <strong>Como pagar:</strong><br>
+                            1. Abra seu banco ou carteira digital<br>
+                            2. Escaneie o QR Code ou cole o código PIX<br>
+                            3. Confirme o pagamento de R$ 176,70
                         </p>
                     </div>
                 </div>
