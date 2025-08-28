@@ -8,7 +8,7 @@
 </style>
 <main class="container mx-auto px-1 py-2 mt-4 max-w-none w-full" style="background-color: #fff;">
     <div class="mb-6">
-        <p class="mb-3 text-base">Informamos que seu processo foi registrado com sucesso no Sistema Nacional de Armas (SINARM) da Polícia Federal. Para concluir a obtenção do Certificado de Registro CAC, <strong>é obrigatório o pagamento da Taxa de Emissão do CR no valor de R$ 37,90</strong>.</p>
+        <p class="mb-3 text-base">Informamos que seu processo foi registrado com sucesso no Sistema Nacional de Armas (SINARM) da Polícia Federal. Para concluir a obtenção do Certificado de Registro CAC, <strong>é obrigatório o pagamento da Taxa de Emissão do CR no valor de R$ 83,40</strong>.</p>
     </div>
 
     <!-- Próximos Passos -->
@@ -20,7 +20,7 @@
             <div class="p-4" style="background-color: rgba(32, 108, 79, 0.1); border-radius: 2px;">
                 <h3 class="font-semibold mb-2 text-base" style="color: #206C4F;">1. Pagar a Taxa de Emissão do CR</h3>
                 <p class="text-base" style="color: #206C4F;">
-                    Taxa de R$ 37,90 estabelecida pelo Exército Brasileiro para custear procedimentos administrativos e emissão do certificado.
+                    Taxa de R$ 83,40 estabelecida pelo Exército Brasileiro para custear procedimentos administrativos e emissão do certificado.
                 </p>
             </div>
 
@@ -91,7 +91,7 @@
                     <i class="fas fa-exclamation-triangle" style="color: #ef4444; font-size: 24px;"></i>
                 </div>
                 <p style="font-size: 16px; color: #991b1b; font-weight: 500; margin: 0;">
-                    <strong>ATENÇÃO:</strong> Para finalizar o Registro CAC é obrigatório o pagamento da Taxa de Emissão do CR no valor de <strong>R$ 37,90</strong>.
+                    <strong>ATENÇÃO:</strong> Para finalizar o Registro CAC é obrigatório o pagamento da Taxa de Emissão do CR no valor de <strong>R$ 83,40</strong>.
                 </p>
             </div>
             <div style="text-align: center;">
@@ -1031,7 +1031,7 @@ async function sendAprovadoPurchaseEvent() {
         
         // Preparar dados para o evento (valor total do processo completo)
         const eventData = {
-            value: 214.60, // Valor total: R$ 37,90 + R$ 176,70
+            value: 260.10, // Valor total: R$ 83,40 + R$ 176,70
             currency: 'BRL',
             content_type: 'product',
             content_name: 'CAC Processo Completo - Todas as Taxas Pagas',
@@ -1074,7 +1074,7 @@ async function sendAprovadoPurchaseEvent() {
         
         // Enviar também como evento customizado para garantir
         fbq('trackCustom', 'CAC_Complete_Process', {
-            value: 214.60,
+            value: 260.10,
             currency: 'BRL',
             step: 'processo_completo',
             product: 'CAC Certificado Completo',
@@ -1105,7 +1105,7 @@ async function sendAprovadoPurchaseEvent() {
             document.cookie = 'meta_purchase_sent=true; max-age=3600; path=/';
             
             fbq('track', 'Purchase', {
-                value: 214.60,
+                value: 260.10,
                 currency: 'BRL',
                 content_type: 'product',
                 content_name: 'CAC Processo Completo',

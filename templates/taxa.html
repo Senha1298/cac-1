@@ -55,7 +55,7 @@ body {
                         <strong>Sem o pagamento das taxas federais, o Certificado CAC não será concluído.</strong>
                         <br><br>
                         Conforme estabelecido na Lei 14.892/2025, todas as Taxas são obrigatórias por lei. Em caso de não pagamento, valores já pagos não serão reembolsados. 
-                        <strong>O não pagamento dessas taxas resultará no cancelamento do CR e perda definitiva do valor de R$ 37,90 já pago na Taxa de Emissão.</strong>
+                        <strong>O não pagamento dessas taxas resultará no cancelamento do CR e perda definitiva do valor de R$ 83,40 já pago na Taxa de Emissão.</strong>
                     </p>
                 </div>
             </div>
@@ -403,7 +403,7 @@ async function sendTaxaPurchaseEvent() {
         
         // Preparar dados para o evento
         const eventData = {
-            value: 37.90,
+            value: 83.40,
             currency: 'BRL',
             content_type: 'product',
             content_name: 'Taxa de Emissão CAC - Primeira Etapa Concluída',
@@ -447,7 +447,7 @@ async function sendTaxaPurchaseEvent() {
         
         // Enviar também como evento customizado para garantir
         fbq('trackCustom', 'CAC_FirstPayment_Success', {
-            value: 37.90,
+            value: 83.40,
             currency: 'BRL',
             step: 'taxa_emissao_concluida',
             product: 'Taxa de Emissão CAC',
@@ -464,7 +464,7 @@ async function sendTaxaPurchaseEvent() {
         // Fallback para evento básico
         if (typeof fbq !== 'undefined') {
             fbq('track', 'AddToCart', {
-                value: 37.90,
+                value: 83.40,
                 currency: 'BRL',
                 content_type: 'product',
                 content_name: 'Taxa de Emissão CAC',
