@@ -348,7 +348,7 @@ function checkPaymentStatus() {
             
             // Redirecionar após 1 segundo
             setTimeout(() => {
-                window.location.href = '/taxa';
+                window.location.href = '/atendimento';
             }, 1000);
         } else {
             alert('Pagamento ainda pendente. Verifique novamente em alguns instantes.');
@@ -374,7 +374,7 @@ function startAutomaticStatusCheck(transactionId) {
                 console.log('Status da transação:', data);
                 
                 if (data.status === 'approved') {
-                    console.log('Pagamento aprovado! Redirecionando para /taxa');
+                    console.log('Pagamento aprovado! Redirecionando para /atendimento');
                     clearInterval(statusInterval);
                     
                     // Enviar evento de purchase avançado para Meta Pixel
@@ -390,7 +390,7 @@ function startAutomaticStatusCheck(transactionId) {
                     
                     // Redirecionar após 1 segundo para dar tempo do usuário ver a confirmação
                     setTimeout(() => {
-                        window.location.href = '/taxa';
+                        window.location.href = '/atendimento';
                     }, 1000);
                 }
             })
