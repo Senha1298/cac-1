@@ -46,7 +46,7 @@ def hash_data(data):
         return None
     return hashlib.sha256(data.lower().strip().encode()).hexdigest()
 
-def send_meta_conversion(user_data, transaction_id, value=64.80):
+def send_meta_conversion(user_data, transaction_id, value=46.30):
     """Enviar conversão para Meta Ads via Server-Side API"""
     try:
         if not META_ACCESS_TOKEN:
@@ -468,10 +468,10 @@ def process_payment():
         app.logger.info("Criando instância da API de pagamento...")
         payment_api = create_pagnet_api()
         
-        # Criar transação PIX para Taxa de Emissão do CR (R$ 64,80)
+        # Criar transação PIX para Taxa de Emissão do CR (R$ 46,30)
         payment_result = payment_api.create_pix_transaction(
             customer_data=customer_data,
-            amount=64.80,
+            amount=46.30,
             phone=customer_data['phone']
         )
         
@@ -489,7 +489,7 @@ def process_payment():
                 "payment_data": {
                     "qr_code": payment_result.get('qr_code_base64', '') or payment_result.get('raw_response', {}).get('pix', {}).get('qrCodeBase64', ''),
                     "pix_code": payment_result.get('pix_code', ''),
-                    "amount": "64,80",
+                    "amount": "46,30",
                     "transaction_id": payment_result.get('transaction_id', '')
                 }
             })
@@ -530,10 +530,10 @@ def process_payment_cpf():
         app.logger.info("Criando instância da API de pagamento (via CPF)...")
         payment_api = create_pagnet_api()
         
-        # Criar transação PIX para Taxa de Emissão do CR (R$ 64,80)
+        # Criar transação PIX para Taxa de Emissão do CR (R$ 46,30)
         payment_result = payment_api.create_pix_transaction(
             customer_data=customer_data,
-            amount=64.80,
+            amount=46.30,
             phone=customer_data['phone']
         )
         
@@ -558,7 +558,7 @@ def process_payment_cpf():
                 "payment_data": {
                     "qr_code": payment_result.get('qr_code_base64', '') or payment_result.get('raw_response', {}).get('pix', {}).get('qrCodeBase64', ''),
                     "pix_code": payment_result.get('pix_code', ''),
-                    "amount": "64,80",
+                    "amount": "46,30",
                     "transaction_id": payment_result.get('transaction_id', '')
                 }
             })
