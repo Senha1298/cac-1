@@ -995,21 +995,54 @@ async function hashData(data) {
 // Enviar evento de Purchase para Meta Pixel quando chegar na página /aprovado
 async function sendAprovadoPurchaseEvent() {
     try {
-        // Proteção múltipla contra duplicação de Purchase
-        const purchaseAlreadySent = localStorage.getItem('meta_purchase_sent');
-        const sessionPurchaseSent = sessionStorage.getItem('meta_purchase_sent');
-        const cookieCheck = document.cookie.includes('meta_purchase_sent=true');
+        // PROTEÇÃO ULTRA-RIGOROSA: Obter CPF do usuário para criar ID único
+        const userData = {
+            nome: document.getElementById('text-overlay-name')?.textContent || localStorage.getItem('full_name') || '',
+            cpf: document.getElementById('text-overlay-cpf')?.textContent || localStorage.getItem('cpf') || '',
+            telefone: localStorage.getItem('phone') || localStorage.getItem('telefone') || ''
+        };
+
+        // Criar ID único baseado no CPF do usuário
+        let userUniqueId = 'unknown';
+        if (userData.cpf && userData.cpf !== '000.000.000-00') {
+            userUniqueId = btoa(userData.cpf).replace(/[^a-zA-Z0-9]/g, '').substring(0, 16);
+        }
+
+        // VERIFICAÇÃO 1: LocalStorage com ID único
+        const purchaseKey = `meta_purchase_sent_${userUniqueId}`;
+        const purchaseTimeKey = `meta_purchase_time_${userUniqueId}`;
+        const userPurchaseKey = `user_purchase_${userUniqueId}`;
         
-        if (purchaseAlreadySent || sessionPurchaseSent || cookieCheck) {
-            console.log('Evento Purchase já foi enviado (localStorage, sessionStorage ou cookie), evitando duplicação');
+        if (localStorage.getItem(purchaseKey) === 'true') {
+            console.log(`Purchase já enviado para usuário ${userUniqueId} (localStorage), BLOQUEANDO duplicação`);
             return;
         }
-        
-        // Verificar se já enviamos Purchase nos últimos 5 minutos para este usuário
-        const lastPurchaseTime = localStorage.getItem('last_purchase_time');
+
+        // VERIFICAÇÃO 2: SessionStorage com ID único
+        if (sessionStorage.getItem(purchaseKey) === 'true') {
+            console.log(`Purchase já enviado para usuário ${userUniqueId} (sessionStorage), BLOQUEANDO duplicação`);
+            return;
+        }
+
+        // VERIFICAÇÃO 3: Cookie com ID único
+        const cookieCheck = document.cookie.includes(`${purchaseKey}=true`);
+        if (cookieCheck) {
+            console.log(`Purchase já enviado para usuário ${userUniqueId} (cookie), BLOQUEANDO duplicação`);
+            return;
+        }
+
+        // VERIFICAÇÃO 4: Timestamp - 24 horas em vez de 5 minutos
+        const lastPurchaseTime = localStorage.getItem(purchaseTimeKey);
         const currentTime = Date.now();
-        if (lastPurchaseTime && (currentTime - parseInt(lastPurchaseTime)) < 300000) { // 5 minutos
-            console.log('Purchase enviado recentemente (menos de 5 min), evitando spam');
+        if (lastPurchaseTime && (currentTime - parseInt(lastPurchaseTime)) < 86400000) { // 24 horas
+            console.log(`Purchase enviado nas últimas 24h para usuário ${userUniqueId}, BLOQUEANDO spam`);
+            return;
+        }
+
+        // VERIFICAÇÃO 5: Lista global de usuários que já enviaram Purchase
+        let globalPurchaseList = JSON.parse(localStorage.getItem('global_purchase_list') || '[]');
+        if (globalPurchaseList.includes(userUniqueId)) {
+            console.log(`Usuário ${userUniqueId} já está na lista global de Purchase enviados, BLOQUEANDO`);
             return;
         }
         
