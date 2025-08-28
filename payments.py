@@ -49,8 +49,8 @@ class PagnetAPI:
         try:
             current_app.logger.info(f"[PAGNET] Iniciando criação de transação PIX - Valor: R$ {amount}")
 
-            # Convert amount to cents
-            amount_cents = int(float(amount) * 100)
+            # Convert amount to cents with proper rounding
+            amount_cents = int(round(float(amount) * 100, 0))
 
             # Prepare customer data
             customer_name = customer_data.get('nome', 'Cliente')
