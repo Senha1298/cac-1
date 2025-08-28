@@ -147,6 +147,27 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+
+    // Salvar endereço no localStorage quando o formulário for enviado
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function(e) {
+        const addressData = {
+            cep: document.getElementById('zip_code').value,
+            endereco: document.getElementById('address').value,
+            numero: document.getElementById('number').value,
+            complemento: document.getElementById('complement').value,
+            bairro: document.getElementById('neighborhood').value,
+            cidade: document.getElementById('city').value,
+            estado: document.getElementById('state').value
+        };
+        
+        // Salvar no localStorage
+        const currentData = JSON.parse(localStorage.getItem('customerData') || '{}');
+        currentData.endereco = addressData;
+        localStorage.setItem('customerData', JSON.stringify(currentData));
+        
+        console.log('Endereço salvo no localStorage:', addressData);
+    });
 });
 </script>
 

@@ -271,6 +271,10 @@ def get_user_data():
         "phone": user_data.get("phone")
     })
 
+@app.route("/chat")
+def chat():
+    return render_template("chat.html")
+
 @app.route("/address", methods=['GET', 'POST'])
 def address():
     if request.method == 'POST':
