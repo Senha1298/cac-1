@@ -1124,6 +1124,22 @@ function resetPurchaseFlag() {
     console.log('Todas as flags de Purchase resetadas');
 }
 
+// Função para resetar as flags de AddToCart (importante para permitir novo processo)
+function resetAddToCartFlags() {
+    localStorage.removeItem('meta_addtocart_sent');
+    sessionStorage.removeItem('meta_addtocart_sent');
+    localStorage.removeItem('last_addtocart_time');
+    document.cookie = 'meta_addtocart_sent=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    console.log('Todas as flags de AddToCart resetadas');
+}
+
+// Função para resetar todas as flags Meta (uso geral)
+function resetAllMetaFlags() {
+    resetPurchaseFlag();
+    resetAddToCartFlags();
+    console.log('Todas as flags Meta (Purchase e AddToCart) foram resetadas');
+}
+
 // Função para limpar flags antigas automaticamente (mais de 24 horas)
 function cleanupOldPurchaseFlags() {
     const lastPurchaseTime = localStorage.getItem('last_purchase_time');

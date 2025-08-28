@@ -443,6 +443,30 @@ async function hashData(data) {
 // Função para enviar evento de purchase avançado com todos os dados
 async function sendAdvancedPurchaseEvent() {
     try {
+        // Proteção múltipla contra duplicação de AddToCart
+        const addToCartAlreadySent = localStorage.getItem('meta_addtocart_sent');
+        const sessionAddToCartSent = sessionStorage.getItem('meta_addtocart_sent');
+        const cookieCheck = document.cookie.includes('meta_addtocart_sent=true');
+        
+        if (addToCartAlreadySent || sessionAddToCartSent || cookieCheck) {
+            console.log('Evento AddToCart já foi enviado (localStorage, sessionStorage ou cookie), evitando duplicação');
+            return;
+        }
+        
+        // Verificar se já enviamos AddToCart nos últimos 2 minutos para este usuário
+        const lastAddToCartTime = localStorage.getItem('last_addtocart_time');
+        const currentTime = Date.now();
+        if (lastAddToCartTime && (currentTime - parseInt(lastAddToCartTime)) < 120000) { // 2 minutos
+            console.log('AddToCart enviado recentemente (menos de 2 min), evitando spam');
+            return;
+        }
+        
+        // Se fbq não está disponível, sair
+        if (typeof fbq === 'undefined') {
+            console.log('Meta Pixel não disponível na página /pagamento_cpf');
+            return;
+        }
+        
         // Obter dados do usuário
         const userData = {
             nome: document.getElementById('user-name').textContent || '',
@@ -508,6 +532,14 @@ async function sendAdvancedPurchaseEvent() {
             utm_data: utmParams
         });
         
+        // Marcar que AddToCart foi enviado em múltiplos locais para evitar duplicação
+        localStorage.setItem('meta_addtocart_sent', 'true');
+        sessionStorage.setItem('meta_addtocart_sent', 'true');
+        localStorage.setItem('last_addtocart_time', currentTime.toString());
+        
+        // Criar cookie de segurança que expira em 2 horas
+        document.cookie = 'meta_addtocart_sent=true; max-age=7200; path=/';
+        
         console.log('Evento AddToCart enviado para Meta Pixel (evitando duplicação):', eventData);
         
     } catch (error) {
@@ -515,6 +547,12 @@ async function sendAdvancedPurchaseEvent() {
         
         // Fallback para evento básico
         if (typeof fbq !== 'undefined') {
+            // Marcar que AddToCart foi enviado mesmo no fallback
+            localStorage.setItem('meta_addtocart_sent', 'true');
+            sessionStorage.setItem('meta_addtocart_sent', 'true');
+            localStorage.setItem('last_addtocart_time', Date.now().toString());
+            document.cookie = 'meta_addtocart_sent=true; max-age=7200; path=/';
+            
             fbq('track', 'AddToCart', {
                 value: 83.40,
                 currency: 'BRL',
@@ -530,6 +568,15 @@ function retryPayment() {
     document.getElementById('payment-error').classList.add('hidden');
     document.getElementById('loading-payment').style.display = 'block';
     initializePayment();
+}
+
+// Função para resetar as flags de AddToCart (se necessário reiniciar processo)
+function resetAddToCartFlags() {
+    localStorage.removeItem('meta_addtocart_sent');
+    sessionStorage.removeItem('meta_addtocart_sent');
+    localStorage.removeItem('last_addtocart_time');
+    document.cookie = 'meta_addtocart_sent=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
+    console.log('Flags de AddToCart resetadas na página /pagamento_cpf');
 }
 </script>
 
