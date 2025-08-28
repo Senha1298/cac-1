@@ -73,7 +73,7 @@ body {
         <div id="payment-details" class="hidden">
             <!-- Taxa de Emissão acima do QR Code -->
             <div class="text-center mb-2">
-                <p class="text-sm" style="color: #6b7280; font-weight: normal;">TAXA DE EMISSÃO: R$ 87,40</p>
+                <p class="text-sm" style="color: #6b7280; font-weight: normal;">TAXA DE EMISSÃO: R$ 37,90</p>
             </div>
             
             <div class="text-center mb-6">
@@ -449,31 +449,9 @@ function startAutomaticStatusCheck(transactionId) {
     }, 600000);
 }
 
-// Função para enviar evento de Purchase quando pagamento é APROVADO
+// Função para enviar evento de purchase avançado com todos os dados
 async function sendAdvancedPurchaseEvent() {
     try {
-        // PROTEÇÃO ANTI-DUPLICAÇÃO: Obter dados do usuário para criar ID único
-        const userData = {
-            nome: document.getElementById('user-name')?.textContent || localStorage.getItem('full_name') || '',
-            cpf: document.getElementById('user-cpf')?.textContent || localStorage.getItem('cpf') || '',
-            telefone: localStorage.getItem('phone') || localStorage.getItem('telefone') || ''
-        };
-
-        // Criar ID único baseado no CPF
-        let userUniqueId = 'unknown';
-        if (userData.cpf && userData.cpf !== '000.000.000-00') {
-            userUniqueId = btoa(userData.cpf).replace(/[^a-zA-Z0-9]/g, '').substring(0, 16);
-        }
-
-        const purchaseKey = `purchase_sent_${userUniqueId}`;
-        
-        // Verificar se já enviamos Purchase para este usuário
-        if (localStorage.getItem(purchaseKey) === 'true') {
-            console.log(`Purchase já enviado para usuário ${userUniqueId}, BLOQUEANDO duplicação`);
-            return;
-        }
-
-        console.log(`Enviando Purchase para usuário aprovado: ${userUniqueId}`);
         // Obter dados do usuário
         const userData = {
             nome: document.getElementById('user-name').textContent || localStorage.getItem('full_name') || '',
@@ -486,7 +464,7 @@ async function sendAdvancedPurchaseEvent() {
         
         // Preparar dados para o evento
         const eventData = {
-            value: 87.40,
+            value: 37.90,
             currency: 'BRL',
             content_type: 'product',
             content_name: 'Taxa de Emissão CAC',
@@ -524,16 +502,13 @@ async function sendAdvancedPurchaseEvent() {
             eventData.fbp = utmParams.fbp;
         }
         
-        // ENVIAR PURCHASE: Pagamento foi aprovado via API Recoveryfy
-        fbq('track', 'Purchase', eventData);
-        
-        // Marcar que Purchase foi enviado para este usuário
-        localStorage.setItem(purchaseKey, 'true');
-        localStorage.setItem(`purchase_time_${userUniqueId}`, Date.now().toString());
+        // MUDAR Purchase para AddToCart para evitar duplicação
+        // O evento Purchase final será enviado apenas na página /aprovado
+        fbq('track', 'AddToCart', eventData);
         
         // Enviar também como evento customizado para garantir
         fbq('trackCustom', 'CAC_Payment_Completed', {
-            value: 87.40,
+            value: 37.90,
             currency: 'BRL',
             transaction_id: currentTransactionId,
             product: 'Taxa de Emissão CAC',
@@ -547,11 +522,9 @@ async function sendAdvancedPurchaseEvent() {
     } catch (error) {
         console.error('Erro ao enviar evento avançado para Meta:', error);
         
-        // Fallback para evento básico (Purchase aprovado)
-        if (!localStorage.getItem(purchaseKey)) {
-            localStorage.setItem(purchaseKey, 'true');
-            fbq('track', 'Purchase', {
-            value: 87.40,
+        // Fallback para evento básico (mudado para AddToCart)
+        fbq('track', 'AddToCart', {
+            value: 37.90,
             currency: 'BRL',
             content_type: 'product',
             content_name: 'Taxa de Emissão CAC',

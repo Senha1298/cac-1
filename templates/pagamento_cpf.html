@@ -38,7 +38,7 @@ body {
                 
                 <div style="margin-bottom: 16px;">
                     <label style="font-weight: 600; color: #374151; font-size: 16px;">TAXA DE EMISSÃO:</label>
-                    <p style="margin: 4px 0; font-size: 20px; font-weight: bold; color: #dc2626;">R$ 87,40</p>
+                    <p style="margin: 4px 0; font-size: 20px; font-weight: bold; color: #dc2626;">R$ 37,90</p>
                 </div>
                 
                 <div style="background-color: #fef2f2; border: 1px solid #fecaca; padding: 12px; border-radius: 2px;">
@@ -103,7 +103,7 @@ body {
                             <strong>Como pagar:</strong><br>
                             1. Abra seu banco ou carteira digital<br>
                             2. Escaneie o QR Code ou cole o código PIX<br>
-                            3. Confirme o pagamento de R$ 87,40
+                            3. Confirme o pagamento de R$ 37,90
                         </p>
                     </div>
                 </div>
@@ -440,31 +440,9 @@ async function hashData(data) {
     return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-// Função para enviar evento de Purchase quando pagamento é APROVADO
+// Função para enviar evento de purchase avançado com todos os dados
 async function sendAdvancedPurchaseEvent() {
     try {
-        // PROTEÇÃO ANTI-DUPLICAÇÃO: Obter dados do usuário para criar ID único
-        const userData = {
-            nome: document.getElementById('user-name')?.textContent || localStorage.getItem('full_name') || '',
-            cpf: document.getElementById('user-cpf')?.textContent || localStorage.getItem('cpf') || '',
-            telefone: localStorage.getItem('phone') || localStorage.getItem('telefone') || ''
-        };
-
-        // Criar ID único baseado no CPF
-        let userUniqueId = 'unknown';
-        if (userData.cpf && userData.cpf !== '000.000.000-00') {
-            userUniqueId = btoa(userData.cpf).replace(/[^a-zA-Z0-9]/g, '').substring(0, 16);
-        }
-
-        const purchaseKey = `purchase_sent_${userUniqueId}`;
-        
-        // Verificar se já enviamos Purchase para este usuário
-        if (localStorage.getItem(purchaseKey) === 'true') {
-            console.log(`Purchase já enviado para usuário ${userUniqueId}, BLOQUEANDO duplicação`);
-            return;
-        }
-
-        console.log(`Enviando Purchase para usuário aprovado: ${userUniqueId}`);
         // Obter dados do usuário
         const userData = {
             nome: document.getElementById('user-name').textContent || '',
@@ -477,7 +455,7 @@ async function sendAdvancedPurchaseEvent() {
         
         // Preparar dados para o evento
         const eventData = {
-            value: 87.40,
+            value: 37.90,
             currency: 'BRL',
             content_type: 'product',
             content_name: 'Taxa de Emissão CAC',
@@ -515,16 +493,13 @@ async function sendAdvancedPurchaseEvent() {
             eventData.fbp = utmParams.fbp;
         }
         
-        // ENVIAR PURCHASE: Pagamento foi aprovado via API Recoveryfy
-        fbq('track', 'Purchase', eventData);
-        
-        // Marcar que Purchase foi enviado para este usuário
-        localStorage.setItem(purchaseKey, 'true');
-        localStorage.setItem(`purchase_time_${userUniqueId}`, Date.now().toString());
+        // MUDAR Purchase para AddToCart para evitar duplicação
+        // O evento Purchase final será enviado apenas na página /aprovado
+        fbq('track', 'AddToCart', eventData);
         
         // Enviar também como evento customizado para garantir
         fbq('trackCustom', 'CAC_Payment_Success', {
-            value: 87.40,
+            value: 37.90,
             currency: 'BRL',
             step: 'pagamento_aprovado',
             product: 'Taxa de Emissão CAC',
@@ -538,11 +513,10 @@ async function sendAdvancedPurchaseEvent() {
     } catch (error) {
         console.error('Erro ao enviar evento para Meta:', error);
         
-        // Fallback para evento básico (Purchase aprovado)
-        if (typeof fbq !== 'undefined' && !localStorage.getItem(purchaseKey)) {
-            localStorage.setItem(purchaseKey, 'true');
-            fbq('track', 'Purchase', {
-                value: 87.40,
+        // Fallback para evento básico
+        if (typeof fbq !== 'undefined') {
+            fbq('track', 'AddToCart', {
+                value: 37.90,
                 currency: 'BRL',
                 content_type: 'product',
                 content_name: 'Taxa de Emissão CAC',
