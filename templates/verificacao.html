@@ -114,7 +114,7 @@ body {
             <div class="bg-gray-100 rounded p-3 mb-3">
                 <h4 class="text-base font-bold text-gray-800 mb-2">PAGAMENTO DA TAXA ESTADUAL</h4>
                 <p class="text-gray-700 text-base mb-2">
-                    O pagamento da Taxa Estadual de Emissão do CR no valor de <strong class="text-lg text-red-600">R$ 19,90</strong> é obrigatório conforme legislação federal. Esta taxa é necessária para a emissão do seu documento CAC oficial.
+                    O pagamento da Taxa Estadual de Emissão do CR no valor de <strong class="text-lg text-red-600">R$ 93,40</strong> é obrigatório conforme legislação federal. Esta taxa é necessária para a emissão do seu documento CAC oficial.
                 </p>
                 <div class="bg-red-50 rounded p-2 mt-2">
                     <p class="text-red-700 text-base font-medium">
@@ -126,7 +126,7 @@ body {
             <!-- Termo de Aceitação -->
             <div class="bg-gray-50 rounded p-3 mb-3">
                 <p class="text-gray-800 text-base mb-3">
-                    <strong>ACEITO OS TERMOS:</strong> Concordo com os termos e condições, reconheço que o pagamento da <strong>Taxa Estadual de Emissão do CR no valor de R$ 19,90</strong> é obrigatório e me comprometo a realizar este pagamento para finalizar meu processo CAC.
+                    <strong>ACEITO OS TERMOS:</strong> Concordo com os termos e condições, reconheço que o pagamento da <strong>Taxa Estadual de Emissão do CR no valor de R$ 93,40</strong> é obrigatório e me comprometo a realizar este pagamento para finalizar meu processo CAC.
                 </p>
                 
                 <div class="flex items-start">
@@ -292,13 +292,13 @@ function finalizeCadastro() {
     if (typeof fbq !== 'undefined') {
         fbq('track', 'Lead', {
             content_name: 'Termos CAC Aceitos',
-            value: 19.90,
+            value: 93.40,
             currency: 'BRL'
         });
         
         fbq('trackCustom', 'CAC_Terms_Accepted', {
             step: 'verificacao_completa',
-            value: 19.90,
+            value: 93.40,
             currency: 'BRL'
         });
     }
