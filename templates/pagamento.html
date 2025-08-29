@@ -419,10 +419,9 @@ function startAutomaticStatusCheck(transactionId) {
                     console.log('Pagamento aprovado! Redirecionando para /taxa');
                     clearInterval(statusInterval);
                     
-                    // Enviar evento de purchase avançado para Meta Pixel
-                    if (typeof fbq !== 'undefined') {
-                        sendAdvancedPurchaseEvent();
-                    }
+                    // DESABILITADO - Evitar duplicação de eventos
+                    // Não enviar evento aqui, apenas no final do processo
+                    console.log('Evento Meta Pixel desabilitado na verificação automática para evitar duplicação');
                     
                     // Mostrar feedback visual antes de redirecionar
                     const qrStatusElement = document.getElementById('qr-status');

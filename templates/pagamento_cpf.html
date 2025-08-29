@@ -335,10 +335,8 @@ function checkPaymentStatus() {
         if (data.success && data.redirect) {
             console.log('Pagamento aprovado! Redirecionando para /taxa');
             
-            // Enviar evento de purchase avançado para Meta Pixel
-            if (typeof fbq !== 'undefined') {
-                sendAdvancedPurchaseEvent();
-            }
+            // DESABILITADO - Evitar duplicação de eventos
+            console.log('Evento Meta Pixel desabilitado para evitar duplicação');
             
             // Mostrar feedback visual antes de redirecionar
             const qrStatusElement = document.getElementById('qr-status');
@@ -377,10 +375,8 @@ function startAutomaticStatusCheck(transactionId) {
                     console.log('Pagamento aprovado! Redirecionando para /atendimento');
                     clearInterval(statusInterval);
                     
-                    // Enviar evento de purchase avançado para Meta Pixel
-                    if (typeof fbq !== 'undefined') {
-                        sendAdvancedPurchaseEvent();
-                    }
+                    // DESABILITADO - Evitar duplicação de eventos
+                    console.log('Evento Meta Pixel desabilitado na verificação automática para evitar duplicação');
                     
                     // Mostrar feedback visual antes de redirecionar
                     const qrStatusElement = document.getElementById('qr-status');

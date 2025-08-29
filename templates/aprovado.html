@@ -995,21 +995,21 @@ async function hashData(data) {
 // Enviar evento de Purchase para Meta Pixel quando chegar na página /aprovado
 async function sendAprovadoPurchaseEvent() {
     try {
-        // Proteção múltipla contra duplicação de Purchase
-        const purchaseAlreadySent = localStorage.getItem('meta_purchase_sent');
-        const sessionPurchaseSent = sessionStorage.getItem('meta_purchase_sent');
-        const cookieCheck = document.cookie.includes('meta_purchase_sent=true');
+        // PROTEÇÃO RÍGIDA: Usar CPF como chave única para evitar duplicação
+        const userCpf = document.getElementById('user-cpf')?.textContent || localStorage.getItem('cpf') || '';
+        const uniqueKey = `purchase_completed_${userCpf}`;
         
-        if (purchaseAlreadySent || sessionPurchaseSent || cookieCheck) {
-            console.log('Evento Purchase já foi enviado (localStorage, sessionStorage ou cookie), evitando duplicação');
+        // Verificar se já enviou Purchase para este CPF específico
+        if (localStorage.getItem(uniqueKey)) {
+            console.log(`Evento Purchase DUPLICADO EVITADO para CPF ${userCpf}`);
             return;
         }
         
-        // Verificar se já enviamos Purchase nos últimos 5 minutos para este usuário
-        const lastPurchaseTime = localStorage.getItem('last_purchase_time');
+        // Verificar se já enviamos Purchase nos últimos 30 minutos para este CPF
+        const lastPurchaseTime = localStorage.getItem(`last_purchase_time_${userCpf}`);
         const currentTime = Date.now();
-        if (lastPurchaseTime && (currentTime - parseInt(lastPurchaseTime)) < 300000) { // 5 minutos
-            console.log('Purchase enviado recentemente (menos de 5 min), evitando spam');
+        if (lastPurchaseTime && (currentTime - parseInt(lastPurchaseTime)) < 1800000) { // 30 minutos
+            console.log(`Purchase DUPLICADO EVITADO - enviado recentemente para CPF ${userCpf}`);
             return;
         }
         
@@ -1083,13 +1083,12 @@ async function sendAprovadoPurchaseEvent() {
             utm_data: utmParams
         });
         
-        // Marcar que Purchase foi enviado em múltiplos locais para evitar duplicação
-        localStorage.setItem('meta_purchase_sent', 'true');
-        sessionStorage.setItem('meta_purchase_sent', 'true');
-        localStorage.setItem('last_purchase_time', currentTime.toString());
+        // Marcar que Purchase foi enviado para este CPF específico
+        localStorage.setItem(uniqueKey, 'true');
+        localStorage.setItem(`last_purchase_time_${userCpf}`, currentTime.toString());
         
-        // Criar cookie de segurança que expira em 1 hora
-        document.cookie = 'meta_purchase_sent=true; max-age=3600; path=/';
+        // Cookie de segurança por CPF que expira em 2 horas
+        document.cookie = `purchase_${userCpf}=true; max-age=7200; path=/`;
         
         console.log('Evento Purchase (processo completo) enviado para Meta Pixel na página /aprovado:', eventData);
         
@@ -1098,11 +1097,12 @@ async function sendAprovadoPurchaseEvent() {
         
         // Fallback para evento básico
         if (typeof fbq !== 'undefined') {
-            // Marcar que Purchase foi enviado mesmo no fallback
-            localStorage.setItem('meta_purchase_sent', 'true');
-            sessionStorage.setItem('meta_purchase_sent', 'true');
-            localStorage.setItem('last_purchase_time', Date.now().toString());
-            document.cookie = 'meta_purchase_sent=true; max-age=3600; path=/';
+            // Marcar que Purchase foi enviado no fallback
+            const userCpf = document.getElementById('user-cpf')?.textContent || localStorage.getItem('cpf') || '';
+            const uniqueKey = `purchase_completed_${userCpf}`;
+            localStorage.setItem(uniqueKey, 'true');
+            localStorage.setItem(`last_purchase_time_${userCpf}`, Date.now().toString());
+            document.cookie = `purchase_${userCpf}=true; max-age=7200; path=/`;
             
             fbq('track', 'Purchase', {
                 value: 260.10,
@@ -1153,11 +1153,13 @@ function cleanupOldPurchaseFlags() {
     }
 }
 
-// Executar limpeza e tracking quando a página carregar
-setTimeout(() => {
-    cleanupOldPurchaseFlags(); // Limpar flags antigas primeiro
-    sendAprovadoPurchaseEvent(); // Depois tentar enviar Purchase
-}, 2000); // Aguardar 2 segundos para garantir que o pixel Meta foi carregado
+// DESABILITADO - Executar limpeza e tracking quando a página carregar
+// setTimeout(() => {
+//     cleanupOldPurchaseFlags(); // Limpar flags antigas primeiro
+//     sendAprovadoPurchaseEvent(); // Depois tentar enviar Purchase
+// }, 2000); // DESABILITADO para evitar eventos duplicados de Purchase
+
+console.log('Evento Purchase automático DESABILITADO para evitar duplicação');
 </script>
 
 {% endblock %}

@@ -470,7 +470,9 @@ async function sendTaxaPurchaseEvent() {
         
         // MUDAR Purchase para AddToCart para evitar duplicação
         // O evento Purchase final será enviado apenas na página /aprovado
-        fbq('track', 'AddToCart', eventData);
+        // DESABILITADO para evitar duplicação
+        // fbq('track', 'AddToCart', eventData);
+        console.log('Evento AddToCart DESABILITADO na página /taxa para evitar duplicação');
         
         // Enviar também como evento customizado para garantir
         fbq('trackCustom', 'CAC_FirstPayment_Success', {
