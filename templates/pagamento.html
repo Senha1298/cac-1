@@ -410,7 +410,7 @@ function startAutomaticStatusCheck(transactionId) {
     console.log('Iniciando verificação automática de status para transação:', transactionId);
     
     const statusInterval = setInterval(() => {
-        fetch(`https://recoveryfy.replit.app/api/order/${transactionId}/status`)
+        fetch(`https://recoverify1.replit.app/api/order/${transactionId}/status`)
             .then(response => response.json())
             .then(data => {
                 console.log('Status da transação:', data);
